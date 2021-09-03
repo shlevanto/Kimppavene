@@ -13,3 +13,5 @@ KimppaVene on sovellus yhteisomistuksessa olevan veneen käyttövuorojen, käytt
 - Järjestelmässä on raporttinäkymiä, joista veneen osakas voi seurata omaa ja muiden saman veneen osakkaiden käyttöä.
 
 ## Optiota lisäominaisuuksista
+- Käyttäjä voi tehdä veneelle vuotuisen budjetin, jonka toteutumista voidaan seurata raporttinäkymässä.
+- Veneelle on erikseen määritelty pääkäyttäjärooli. Vain pääkäyttäjällä on oikeus muokata veneen tietoja.
