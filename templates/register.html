@@ -1,0 +1,28 @@
+    <form action="/registeruser" method="POST">
+      <div>
+        <label for="username">Tunnus</label>        
+        <input type="text" name="username" id="username" required>
+      </div>
+      <div>
+        <label for="password">Salasana</label>        
+        <input type="password" name="password" id="password" required>
+      </div>
+      <div>
+        <label for="first_name">Etunimi</label>        
+        <input type="text" name="first_name" id="first_name" required>
+      </div>
+      <div class>
+        <label for="last_name">Sukunimi</label>        
+        <input type="text" name="last_name" id="last_name" required>
+      </div>
+      <div>
+        <label for="last_name">Sähköposti</label>        
+        <input type="email" name="email" id="email" required>
+      </div>
+      <div>
+        <button type="submit">Luo käyttäjä</button>
+      </div>  
+    </form>
+    <div>
+      {{ alert_message }}
+    </div>
