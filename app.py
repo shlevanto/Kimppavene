@@ -49,7 +49,7 @@ def loginuser():
                                 }
             return redirect('/')
         else:
-            return render_template('/login', alert_message=alert_message)
+            return render_template('login.html', alert_message=alert_message)
 
 @app.route('/logout')
 def logout():
@@ -82,12 +82,12 @@ def register_user():
         
         try:
             db.session.execute(sql, {'username': username, 'password': hash_value, 
-                                'first_name': first_name, 'last_name': last_name, 'email': email})
+                                     'first_name': first_name, 'last_name': last_name, 'email': email})
             db.session.commit()
         
         except exc.IntegrityError:
             alert_message = 'Käyttäjätunnus {} on jo käytössä.'.format(username)
             return render_template('register.html', alert_message=alert_message)
 
-        return redirect('/')
+        return redirect('/login')
 
