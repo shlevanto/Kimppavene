@@ -3,9 +3,10 @@ from db import db
 from flask import redirect, render_template, session, request
 from sqlalchemy import exc
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from utils import login_required
 
 @app.route('/')
+@login_required
 def index():
     return render_template('index.html')
 
@@ -18,6 +19,7 @@ def login():
         return redirect('/')
     except(KeyError):
         return render_template('login.html')
+
 
 @app.route('/loginuser', methods=['POST'])
 def loginuser():
@@ -45,10 +47,12 @@ def loginuser():
         else:
             return render_template('login.html', alert_message=alert_message)
 
+
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect('/login')
+
 
 @app.route('/register')
 def register():
