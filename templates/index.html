@@ -1,0 +1,4 @@
+Tervetuloa kimppaveneeseen
+{% if session.user %}
+  {{session.user.first_name}} {{session.user.last_name}}
+{% endif %}
