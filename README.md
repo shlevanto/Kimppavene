@@ -1,4 +1,4 @@
-vTämä on HY Tietokantasovellus syksy 2021 kurssityö. Kurssin tavoitteena on rakentaa ja julkaista Herokussa toimiva web-sovellus PythoninFlask-kirjastoa ja PostgreSQL-tietokantaa hyödyntäen. 
+Tämä on HY Tietokantasovellus syksy 2021 kurssityö. Kurssin tavoitteena on rakentaa ja julkaista Herokussa toimiva web-sovellus PythoninFlask-kirjastoa ja PostgreSQL-tietokantaa hyödyntäen. 
 
 ## Kimppavene -sovellus
 Kimppavene on sovellus yhteisomistuksessa olevan veneen käyttövuorojen, käyttöoikeuksen ja kulujen seurantaan hallintaan. 
