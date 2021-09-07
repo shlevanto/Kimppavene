@@ -1,5 +1,6 @@
 from flask import Flask, redirect, render_template, session, request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import exc
 from werkzeug.security import generate_password_hash, check_password_hash
 from os import getenv
 
@@ -11,13 +12,12 @@ db = SQLAlchemy(app)
 
 
 @app.route('/')
-def index(alert_message):
+def index():
     return render_template('index.html')
 
 
 @app.route('/login')
 def login():
-    
     # if a user is logged in, we redirect to index
     try:
         current_user = session['user']
@@ -33,11 +33,11 @@ def loginuser():
         
     # get user
     sql = 'SELECT * FROM users WHERE username=:username'
-    result = db.session.execute(sql, {"username": username})
+    result = db.session.execute(sql, {'username': username})
     user = result.fetchone()
 
     if not user:
-        return render_template("login.html", alert_message=alert_message)
+        return render_template('login.html', alert_message=alert_message)
     else:
         hash_value = user.password
         if check_password_hash(hash_value, password):
@@ -55,3 +55,39 @@ def loginuser():
 def logout():
     session.clear()
     return redirect('/login')
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
+
+
+@app.route('/registeruser', methods=['POST'])
+def register_user():
+    username = request.form['username']
+    password = request.form['password']
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    email = request.form['email']
+    
+    def validate_password(password):
+        return len(password) >= 8
+
+    if not validate_password(password):
+        alert_message = 'Salasanan on oltava vähintään 8 merkkiä pitkä'
+        return render_template('register.html', alert_message=alert_message)
+    else:
+        hash_value = generate_password_hash(password)
+        sql = '''INSERT INTO users (username, password, first_name, last_name, email)
+                 VALUES(:username, :password, :first_name, :last_name, :email)'''
+        
+        try:
+            db.session.execute(sql, {'username': username, 'password': hash_value, 
+                                'first_name': first_name, 'last_name': last_name, 'email': email})
+            db.session.commit()
+        
+        except exc.IntegrityError:
+            alert_message = 'Käyttäjätunnus {} on jo käytössä.'.format(username)
+            return render_template('register.html', alert_message=alert_message)
+
+        return redirect('/')
+
