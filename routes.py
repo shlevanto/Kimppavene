@@ -4,10 +4,12 @@ from flask import redirect, render_template, session, request
 from sqlalchemy import exc
 from werkzeug.security import generate_password_hash, check_password_hash
 from utils import login_required
+from secrets import token_hex
 
 @app.route('/')
 @login_required
 def index():
+
     return render_template('index.html')
 
 # template for chart route
@@ -52,6 +54,20 @@ def loginuser():
                                 'first_name': user.first_name, 
                                 'last_name': user.last_name
                                 }
+            
+            sql = '''SELECT name, id FROM boats  WHERE id = (SELECT boat_id FROM owners WHERE user_id=:user_id LIMIT 1)'''
+            result = db.session.execute(sql, {'user_id': user.id})
+            # this now selects the first boat of the owner
+            # it should check how many boats the user has
+            # if 0 --> redirect to create / join boat
+            # if > 1 --> redirect to choose boat
+
+            boat = result.fetchone()
+
+            session['boat'] = {
+                                'id': boat.id,
+                                'name': boat.name 
+            }
             return redirect('/')
         else:
             return render_template('login.html', alert_message=alert_message)
@@ -97,4 +113,101 @@ def register_user():
             return render_template('register.html', alert_message=alert_message)
 
         return redirect('/login')
+
+@app.route('/boats')
+@login_required
+def boats():
+    # use parameter for getting current boat info
+    return render_template('boats.html')
+
+
+@app.route('/addboat', methods=['POST'])
+@login_required
+def addboat():
+    user_id = session['user']['id']
+    key = token_hex(3)
+    boat_name = request.form['boat_name']
+    boat_type = request.form['boat_type']
+    boat_year = request.form['boat_year']
+    boat_description = request.form['boat_description']
+
+    # Inserts new boat, uses the new id to insert ownership
+    sql = '''
+            WITH new_boat_id AS (
+                INSERT INTO boats (name, type, year, description, key)
+                VALUES (:boat_name, :boat_type, :boat_year, :boat_description, :key)
+                RETURNING id
+                )
+            INSERT INTO owners (user_id, boat_id)
+            VALUES (
+                :user_id, (
+                    SELECT id FROM new_boat_id
+                    )
+                )
+            '''
+    # there is a small possibility that two keys are identical
+    # while this is a narrow possibility, the key value in database is constrained to unique, 
+    # so we need to make sure the key is not a duplicate
+
+    while True:
+        result = db.session.execute('SELECT id FROM boats WHERE key=:key', {'key': key})
+        key_is_duplicate = result.fetchall()
+
+        if key_is_duplicate:
+            key = token_hex(3)
+            continue
+        break
+
+    db.session.execute(sql, {
+                            'boat_name': boat_name, 
+                            'boat_type': boat_type, 
+                            'boat_year': boat_year,
+                            'boat_description': boat_description,
+                            'key': key,
+                            'user_id': user_id
+                            })
+    db.session.commit()
+    
+    # set new boat as current boat
+    result = db.session.execute('SELECT name, id FROM boats WHERE key=:key', {'key': key})
+    db.session.commit()
+
+    boat = result.fetchone()
+
+    session['boat'] = {
+                            'id': boat.id,
+                            'name': boat.name
+                        }
+
+    return redirect('/')
+
+
+@app.route('/joinboat', methods=['POST'])
+@login_required
+def joinboat():
+    key = request.form['boat_key']
+    user_id = session['user']['id']
+
+    # add a try except here
+    sql = '''INSERT INTO owners (boat_id, user_id) VALUES ((SELECT id FROM boats WHERE key=:key), :user_id)'''
+
+    try: 
+        db.session.execute(sql, {'key': key, 'user_id': user_id})
+        result = db.session.execute('SELECT id, name FROM boats WHERE key=:key', {'key': key})
+        db.session.commit()
+        
+        boat = result.fetchone()
+        session['boat'] = {
+                            'id': boat.id,
+                            'name': boat.name
+                        }
+        return render_template('boats.html', success_message='Liityit veneeseen ' + boat.name)
+    
+    except:
+        alert_message = 'Avaimella ei löydy venettä'
+        return render_template('boats.html', alert_message=alert_message)
+
+    db.session.commit()
+
+    return redirect('/')
 
