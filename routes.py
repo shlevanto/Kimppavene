@@ -138,11 +138,11 @@ def addboat():
                 VALUES (:boat_name, :boat_type, :boat_year, :boat_description, :key)
                 RETURNING id
                 )
-            INSERT INTO owners (user_id, boat_id)
+            INSERT INTO owners (user_id, boat_id, boat_admin)
             VALUES (
                 :user_id, (
                     SELECT id FROM new_boat_id
-                    )
+                    ), TRUE
                 )
             '''
     # there is a small possibility that two keys are identical
