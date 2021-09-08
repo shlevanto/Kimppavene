@@ -10,6 +10,15 @@ from utils import login_required
 def index():
     return render_template('index.html')
 
+# template for chart route
+@app.route('/chart')
+@login_required
+def chart():
+    labels = ['Tom', 'Dick', 'Harry']
+    label = 'No. of things'
+    data = [1, 3, 4]
+    return render_template('chart.html', labels=labels, label=label, data=data)
+
 
 @app.route('/login')
 def login():
