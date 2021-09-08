@@ -1,28 +1,39 @@
+{% extends "layout.html" %} 
+
+{% block navitems %}
+<li class="navbar-item">
+  <a class="nav-link" href="/login">Kirjaudu</a>
+</li>
+<li class="navbar-item">
+  <a class="nav-link" href="/register">Rekisteröidy</a>
+</li>
+{% endblock %}
+
+{% block content %}
     <form action="/registeruser" method="POST">
-      <div>
+      <div class="form-group col-6">
         <label for="username">Tunnus</label>        
-        <input type="text" name="username" id="username" required>
+        <input type="text" class="form-control" name="username" id="username" required>
       </div>
-      <div>
+      <div class="form-group col-6">
         <label for="password">Salasana</label>        
-        <input type="password" name="password" id="password" required>
+        <input type="password" class="form-control" name="password" id="password" required>
       </div>
-      <div>
+      <div class="form-group col-6">
         <label for="first_name">Etunimi</label>        
-        <input type="text" name="first_name" id="first_name" required>
+        <input type="text" class="form-control" name="first_name" id="first_name" required>
       </div>
-      <div class>
+      <div class="form-group col-6">
         <label for="last_name">Sukunimi</label>        
-        <input type="text" name="last_name" id="last_name" required>
+        <input type="text" class="form-control" name="last_name" id="last_name" required>
       </div>
-      <div>
+      <div class="form-group col-6">
         <label for="last_name">Sähköposti</label>        
-        <input type="email" name="email" id="email" required>
+        <input type="email" class="form-control" name="email" id="email" required>
       </div>
-      <div>
-        <button type="submit">Luo käyttäjä</button>
+      <div class="form-group col-6">
+        <button type="submit" class="btn btn-primary">Luo käyttäjä</button>
       </div>  
     </form>
-    <div>
-      {{ alert_message }}
-    </div>
+{% endblock %}
+

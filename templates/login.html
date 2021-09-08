@@ -1,16 +1,27 @@
-<form action="/loginuser" method="POST">
-  <div>
-    <label for="username">Tunnus</label>        
-    <input type="text" name="username" id="username">
-  </div>
-  <div>
-    <label for="password">Salasana</label>        
-    <input type="password" name="password" id="password">
-  </div>
-  <div>  
-    <button type="submit">Kirjaudu</button>
-  </div>
-</form>
-<div>
-  {{ alert_message }}
-</div>
+{% extends "layout.html" %} 
+
+{% block navitems %}
+<li class="navbar-item">
+  <a class="nav-link" href="/login">Kirjaudu</a>
+</li>
+<li class="navbar-item">
+  <a class="nav-link" href="/register">Rekisteröidy</a>
+</li>
+{% endblock %}
+
+{% block content %}
+    <form action="/loginuser" method="POST">
+      <div class="form-group col-6">
+        <label for="username">Tunnus</label>        
+        <input type="text" class="form-control" name="username" id="username">
+      </div>
+      <div class="form-group col-6">
+        <label for="password">Salasana</label>        
+        <input type="password" class="form-control" name="password" id="password">
+      </div>
+      <div class="form-group col-6">
+        <button type="submit" class="btn btn-primary">Kirjaudu</button>
+      </div>  
+    </form>
+{% endblock %}
+

@@ -1,4 +1,9 @@
-Tervetuloa kimppaveneeseen
-{% if session.user %}
-  {{session.user.first_name}} {{session.user.last_name}}
-{% endif %}
+{% extends "layout.html" %}
+
+{% block navitems %}
+  {% include "navbar.html"%}
+{% endblock %}
+
+{% block content %}
+  This is the main page.
+{% endblock %}
