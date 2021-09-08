@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block navitems %}
+{% include "navbar.html" %}
+{% endblock %}
+
+{% block content %}
+<!-- Info on current boat + owners -->
+<!-- Accordions for add boat and join boat -->
+
+<form action="/addboat" method="POST">
+  <div class="form-group col-6">
+    <label for="boat_name">Veneen nimi</label>        
+    <input type="text" class="form-control" name="boat_name" id="boat_name">
+  </div>
+  <div class="form-group col-6">
+    <label for="boat_type">Veneen tyyppi</label>        
+    <input type="text" class="form-control" name="boat_type" id="boat_type">
+  </div>
+  <div class="form-group col-6">
+    <label for="boat_year">Rakennusvuosi</label>        
+    <input type="number" class="form-control" name="boat_year" id="boat_year">
+  </div>
+  <div class="form-group col-6">
+    <label for="boat_description">Kuvaus</label>        
+    <textarea class="form-control" rows="3" name="boat_description" id="boat_description"></textarea>
+  </div>
+  <div class="form-group col-6">
+    <button type="submit" class="btn btn-primary">Luo vene</button>
+  </div>  
+</form>
+<br/>
+  <form action="/joinboat" method="POST">
+    <div class="form-group col-6">
+      <label for="boat_name">Veneen avainkoodi</label>        
+      <input type="text" class="form-control" name="boat_key" id="boat_key">
+    </div>
+    <div class="form-group col-6">
+      <button type="submit" class="btn btn-primary">Liity veneeseen</button>
+    </div>  
+  </form>
+</p>
+{% endblock %}
