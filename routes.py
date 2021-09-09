@@ -3,8 +3,9 @@ from db import db
 from flask import redirect, render_template, session, request
 from sqlalchemy import exc
 from werkzeug.security import generate_password_hash, check_password_hash
-from utils import login_required
+from utils import login_required, validate_alphanum, validate_length, validate_year
 from secrets import token_hex
+from datetime import date
 
 @app.route('/')
 @login_required
@@ -37,7 +38,12 @@ def loginuser():
     username = request.form['username']
     password = request.form['password']
     alert_message = 'Virheellinen käyttäjänimi tai salasana'
-        
+
+    if not (validate_length(username, 30) and validate_length(password, 30)):
+        alert_message = 'Käyttäjänimi tai salasana liian pitkä.'
+        return render_template('login.html', alert_message=alert_message)
+
+
     # get user
     sql = 'SELECT * FROM users WHERE username=:username'
     result = db.session.execute(sql, {'username': username})
@@ -92,12 +98,14 @@ def register_user():
     last_name = request.form['last_name']
     email = request.form['email']
     
-    def validate_password(password):
-        return len(password) >= 8
-
-    if not validate_password(password):
+    if not validate_length(password, min=8):
         alert_message = 'Salasanan on oltava vähintään 8 merkkiä pitkä'
         return render_template('register.html', alert_message=alert_message)
+    
+    if not (validate_length(username, 30) and validate_length(password, 30)):
+        alert_message = 'Käyttäjätunnus tai salasana on liian pitkä.'
+        return render_template('register.html', alert_message=alert_message)
+    
     else:
         hash_value = generate_password_hash(password)
         sql = '''INSERT INTO users (username, password, first_name, last_name, email)
@@ -117,7 +125,11 @@ def register_user():
 @app.route('/boats')
 @login_required
 def boats():
-    # use parameter for getting current boat info
+    # to-do 
+    # 1. show info on current boat
+    # 2. change to another boat
+    # 3. delete boat?
+
     return render_template('boats.html')
 
 
@@ -131,6 +143,14 @@ def addboat():
     boat_year = request.form['boat_year']
     boat_description = request.form['boat_description']
 
+    if not (validate_length(boat_name, 50) and validate_length(boat_type, 50)):
+        alert_message = 'Veneen nimi tai tyyppi on liian pitkä'
+        return render_template('boats.html', alert_message=alert_message)
+
+
+    if not (validate_year(boat_year)):
+        alert_message = 'Valmistusvuoden on oltava väliltä 1800 - {}'.format(date.today().year)
+        return render_template('boats.html', alert_message=alert_message)
     # Inserts new boat, uses the new id to insert ownership
     sql = '''
             WITH new_boat_id AS (
