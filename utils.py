@@ -24,4 +24,4 @@ def validate_alphanum(input):
 
 
 def validate_year(input, min=1800, max=date.today().year):
-    return (input >= min) and (input <= max)
+    return (int(input) >= min) and (int(input) <= max)
