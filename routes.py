@@ -228,7 +228,7 @@ def joinboat():
         return render_template('boats.html', success_message='Liityit veneeseen ' + boat.name)
     
     except:
-        alert_message = 'Avaimella ei löydy venettä'
+        alert_message = 'Avaimella ei löydy venettä.'
         return render_template('boats.html', alert_message=alert_message)
 
     db.session.commit()
