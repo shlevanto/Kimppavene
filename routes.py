@@ -208,6 +208,10 @@ def joinboat():
     key = request.form['boat_key']
     user_id = session['user']['id']
 
+    if not(validate_length(key, 30)):
+        alert_message = 'Avaimella ei löydy venettä.'
+        return render_template('boats.html', alert_message=alert_message)
+
     # add a try except here
     sql = '''INSERT INTO owners (boat_id, user_id) VALUES ((SELECT id FROM boats WHERE key=:key), :user_id)'''
 
