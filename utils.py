@@ -16,7 +16,7 @@ def login_required(f):
 
 
 def validate_length(input, max=500, min=1):
-    return (input >= min) and (input <= max)
+    return (len(input) >= min) and (len(input) <= max)
 
 
 def validate_alphanum(input):
