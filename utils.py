@@ -1,5 +1,7 @@
 from functools import wraps
 from flask import session, redirect
+from datetime import date
+import re
 
 
 def login_required(f):
@@ -11,3 +13,15 @@ def login_required(f):
         except(KeyError):
             return redirect('/login')
     return decorated_function
+
+
+def validate_length(input, max=500, min=1):
+    return (input >= min) and (input <= max)
+
+
+def validate_alphanum(input):
+    return re.match('^[a-zA-Z0-9_]*$', input) is not None
+
+
+def validate_year(input, min=1800, max=date.today().year):
+    return (input >= min) and (input <= max)
