@@ -1,6 +1,6 @@
 from app import app
 from db import db
-from flask import redirect, render_template, session, request
+from flask import redirect, render_template, session, request, url_for
 from sqlalchemy import exc
 from werkzeug.security import generate_password_hash, check_password_hash
 from utils import login_required, validate_alphanum, validate_length, validate_year
@@ -69,12 +69,18 @@ def loginuser():
             # if > 1 --> redirect to choose boat
 
             boat = result.fetchone()
+            
 
-            session['boat'] = {
+            if boat is not None:
+                session['boat'] = {
                                 'id': boat.id,
                                 'name': boat.name 
-            }
-            return redirect('/')
+                }
+                return redirect('/')
+            else: 
+                session['boat'] = {'id':'',
+                                    'name':''}
+                return redirect('/boats')
         else:
             return render_template('login.html', alert_message=alert_message)
 
@@ -127,10 +133,35 @@ def register_user():
 def boats():
     # to-do 
     # 1. show info on current boat
+
+    if session['boat']['id'] == '':
+        current_boat = None
+    else:
+        sql = '''SELECT name, type, year, description FROM boats WHERE id=:session_boat'''
+        result = db.session.execute(sql, {'session_boat': session['boat']['id']})
+        db.session.commit()
+        current_boat = result.fetchone()
+
+    # 1.1. get owners of current boat
+    if session['boat']['id'] == '':
+        current_boat = None
+    else:
+        sql = '''SELECT first_name, last_name 
+                    FROM users 
+                    WHERE id 
+                    IN (
+                        SELECT user_id FROM owners WHERE boat_id=:session_boat
+                        );
+'''
+        result = db.session.execute(sql, {'session_boat': session['boat']['id']})
+        db.session.commit()
+        owners = result.fetchall()
+
+    # sql = '''SELECT '''
     # 2. change to another boat
     # 3. delete boat?
 
-    return render_template('boats.html')
+    return render_template('boats.html', current_boat=current_boat, owners=owners)
 
 
 @app.route('/addboat', methods=['POST'])
@@ -145,12 +176,12 @@ def addboat():
 
     if not (validate_length(boat_name, 50) and validate_length(boat_type, 50)):
         alert_message = 'Veneen nimi tai tyyppi on liian pitkä'
-        return render_template('boats.html', alert_message=alert_message)
+        return redirect(url_for('boats', alert_message=alert_message))
 
 
     if not (validate_year(boat_year)):
         alert_message = 'Valmistusvuoden on oltava väliltä 1800 - {}'.format(date.today().year)
-        return render_template('boats.html', alert_message=alert_message)
+        return redirect(url_for('boats', alert_message=alert_message))
     # Inserts new boat, uses the new id to insert ownership
     sql = '''
             WITH new_boat_id AS (
@@ -225,11 +256,12 @@ def joinboat():
                             'id': boat.id,
                             'name': boat.name
                         }
-        return render_template('boats.html', success_message='Liityit veneeseen ' + boat.name)
+        success_message = 'Liityit veneeseen ' + boat.name
+        return redirect(url_for('boats', success_message=success_message))
     
     except:
         alert_message = 'Avaimella ei löydy venettä.'
-        return render_template('boats.html', alert_message=alert_message)
+        return redirect(url_for('boats', alert_message=alert_message))
 
     db.session.commit()
 

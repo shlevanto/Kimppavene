@@ -5,7 +5,28 @@
 {% endblock %}
 
 {% block content %}
-<!-- Info on current boat + owners -->
+<table class="table table borderless">
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">Tyyppi</th>
+      <th scope="col">Rakennusvuosi</th>
+      <th scope="col">Omistajat</th>
+      <th scope="col">Ylläpitäjä</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      {% if current_boat %}  
+      <th>{{current_boat.name}}</td>
+      <td>{{current_boat.type}}</td>
+      <td>{{current_boat.year}}</td>
+      <td>{% for owner in owners %} {{ owner.first_name }} {{ owner.last_name }} </br> {% endfor %}</td>
+      {% endif %}
+    </tr>
+  </tbody>
+</table>
+List of boats with button to choose.
 <!-- Accordions for add boat and join boat -->
 
 <form action="/addboat" method="POST">
