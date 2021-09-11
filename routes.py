@@ -1,6 +1,6 @@
 from app import app
 from db import db
-from flask import redirect, render_template, session, request, url_for
+from flask import redirect, render_template, session, request, url_for, flash
 from sqlalchemy import exc
 from werkzeug.security import generate_password_hash, check_password_hash
 from utils import login_required, validate_alphanum, validate_length, validate_year
@@ -10,7 +10,6 @@ from datetime import date
 @app.route('/')
 @login_required
 def index():
-
     return render_template('index.html')
 
 # template for chart route
@@ -37,11 +36,10 @@ def login():
 def loginuser():
     username = request.form['username']
     password = request.form['password']
-    alert_message = 'Virheellinen käyttäjänimi tai salasana'
 
     if not (validate_length(username, 30) and validate_length(password, 30)):
-        alert_message = 'Käyttäjänimi tai salasana liian pitkä.'
-        return render_template('login.html', alert_message=alert_message)
+        flash('Käyttäjänimi tai salasana liian pitkä.')
+        return redirect('/login')
 
 
     # get user
@@ -50,7 +48,8 @@ def loginuser():
     user = result.fetchone()
 
     if not user:
-        return render_template('login.html', alert_message=alert_message)
+        flash('Virheellinen käyttäjätunnus tai salasana.')
+        return redirect('/login')
     else:
         hash_value = user.password
         if check_password_hash(hash_value, password):
@@ -82,7 +81,8 @@ def loginuser():
                                     'name':''}
                 return redirect('/boats')
         else:
-            return render_template('login.html', alert_message=alert_message)
+            flash('Virheellinen käyttäjätunnus tai salasana.')
+            return redirect('/login')
 
 
 @app.route('/logout')
@@ -105,13 +105,13 @@ def register_user():
     email = request.form['email']
     
     if not validate_length(password, min=8):
-        alert_message = 'Salasanan on oltava vähintään 8 merkkiä pitkä'
-        return render_template('register.html', alert_message=alert_message)
+        flash('Salasanan on oltava vähintään 8 merkkiä pitkä.')
+        return redirect('/register')
     
     if not (validate_length(username, 30) and validate_length(password, 30)):
-        alert_message = 'Käyttäjätunnus tai salasana on liian pitkä.'
-        return render_template('register.html', alert_message=alert_message)
-    
+        flash('Käyttäjätunnus tai salasana on liian pitkä.')
+        return redirect('/register')
+
     else:
         hash_value = generate_password_hash(password)
         sql = '''INSERT INTO users (username, password, first_name, last_name, email)
@@ -123,8 +123,8 @@ def register_user():
             db.session.commit()
         
         except exc.IntegrityError:
-            alert_message = 'Käyttäjätunnus {} on jo käytössä.'.format(username)
-            return render_template('register.html', alert_message=alert_message)
+            flash('Käyttäjätunnus {} on jo käytössä.'.format(username))
+            return redirect('/register')
 
         return redirect('/login')
 
@@ -145,13 +145,14 @@ def boats():
     # 1.1. get owners of current boat
     if session['boat']['id'] == '':
         current_boat = None
+        owners=None
     else:
         sql = '''SELECT first_name, last_name 
                     FROM users 
                     WHERE id 
                     IN (
                         SELECT user_id FROM owners WHERE boat_id=:session_boat
-                        );
+                        )
 '''
         result = db.session.execute(sql, {'session_boat': session['boat']['id']})
         db.session.commit()
@@ -175,13 +176,13 @@ def addboat():
     boat_description = request.form['boat_description']
 
     if not (validate_length(boat_name, 50) and validate_length(boat_type, 50)):
-        alert_message = 'Veneen nimi tai tyyppi on liian pitkä'
-        return redirect(url_for('boats', alert_message=alert_message))
+        flash('Veneen nimi tai tyyppi on liian pitkä.')
+        return redirect('/boats')
 
 
     if not (validate_year(boat_year)):
-        alert_message = 'Valmistusvuoden on oltava väliltä 1800 - {}'.format(date.today().year)
-        return redirect(url_for('boats', alert_message=alert_message))
+        flash('Valmistusvuoden on oltava väliltä 1800 - {}.'.format(date.today().year))
+        return redirect('/boats')
     # Inserts new boat, uses the new id to insert ownership
     sql = '''
             WITH new_boat_id AS (
@@ -230,7 +231,7 @@ def addboat():
                             'name': boat.name
                         }
 
-    return redirect('/')
+    return redirect('/boats')
 
 
 @app.route('/joinboat', methods=['POST'])
@@ -240,8 +241,8 @@ def joinboat():
     user_id = session['user']['id']
 
     if not(validate_length(key, 30)):
-        alert_message = 'Avaimella ei löydy venettä.'
-        return render_template('boats.html', alert_message=alert_message)
+        flash('Avaimella ei löydy venettä.')
+        return redirect('/boats')
 
     # add a try except here
     sql = '''INSERT INTO owners (boat_id, user_id) VALUES ((SELECT id FROM boats WHERE key=:key), :user_id)'''
@@ -256,12 +257,12 @@ def joinboat():
                             'id': boat.id,
                             'name': boat.name
                         }
-        success_message = 'Liityit veneeseen ' + boat.name
-        return redirect(url_for('boats', success_message=success_message))
+        flash('Liityit veneeseen {}'.format(boat.name))
+        return redirect('/boats')
     
     except:
-        alert_message = 'Avaimella ei löydy venettä.'
-        return redirect(url_for('boats', alert_message=alert_message))
+        flash('Avaimella ei löydy venettä.')
+        return redirect('/boats')
 
     db.session.commit()
 
