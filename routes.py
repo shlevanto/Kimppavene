@@ -1,10 +1,5 @@
 from app import app
-from db import db
-from flask import redirect, render_template, session, request, flash
-from werkzeug.security import generate_password_hash, check_password_hash
-from utils import login_required, validate_alphanum, validate_length, validate_year
-from secrets import token_hex
-from datetime import date
+from utils import login_required
 
 from views.index import index_view
 from views.login import login_view, loginuser_view
