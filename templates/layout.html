@@ -35,20 +35,21 @@
           {% endif %}
       {% endif %}
       </div>
-      
-      {% if alert_message %}
-      <div class="alert alert-primary">
-        {{ alert_message }}
-      </div>
-      {% endif %}
-      {% if success_message %}
-      <div class="alert alert-success">
-        {{ success_message }}
-      </div>
-      {% endif %}
+            
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-primary">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
       <div class="col-8">
         {% block content %}{% endblock %}
-      </div>   
+      </div>
+   
   </div>
     
     <!-- Bootstrap -->
