@@ -45,50 +45,85 @@
   </tbody>
 </table>
 
-List of boats with button to choose.
-<!-- Accordions for add boat and join boat -->
-
-<form action="/addboat" method="POST">
-  <div class="form-group col-6">
-    <label for="boat_name">Veneen nimi</label>        
-    <input type="text" class="form-control" name="boat_name" id="boat_name" required>
-  </div>
-  <div class="form-group col-6">
-    <label for="boat_type">Veneen tyyppi</label>        
-    <input type="text" class="form-control" name="boat_type" id="boat_type" required>
-  </div>
-  <div class="form-group col-6">
-    <label for="boat_year">Rakennusvuosi</label>        
-    <input type="number" class="form-control" name="boat_year" id="boat_year" required>
-  </div>
-  <div class="form-group col-6">
-    <label for="boat_description">Kuvaus</label>        
-    <textarea class="form-control" rows="3" name="boat_description" id="boat_description"></textarea>
-    <p>
-      <span id="charCount">0</span>/300 merkkiä
-    </p>  
-    
-    <script 
-      src="../static/js/charCount.js" 
-      textField="boat_description" 
-      charCount="charCount" 
-      max="300">
-    </script>
+<div class="accordion" id="accordionBoats">  
   
-  </div>
-  <div class="form-group col-6">
-    <button type="submit" class="btn btn-primary">Luo vene</button>
-  </div>  
-</form>
-<br/>
-  <form action="/joinboat" method="POST">
-    <div class="form-group col-6">
-      <label for="boat_name">Veneen avainkoodi</label>        
-      <input type="text" class="form-control" name="boat_key" id="boat_key">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="chooseBoat">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+        Valitse vene
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="chooseBoat" data-bs-parent="#accordionBoats">
+      <div class="accordion-body">
+        Tähän tulee luettelo veneistäsi ja valintanappi jokaisen perään.     
+      </div>
     </div>
-    <div class="form-group col-6">
-      <button type="submit" class="btn btn-primary">Liity veneeseen</button>
-    </div>  
-  </form>
-</p>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="addBoat">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        Lisää uusi vene
+      </button>
+    </h2>
+    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="addBoat" data-bs-parent="#accordionBoats">
+      <div class="accordion-body">
+        <form action="/addboat" method="POST">
+          <div class="form-group col-6">
+            <label for="boat_name">Veneen nimi</label>        
+            <input type="text" class="form-control" name="boat_name" id="boat_name" required>
+          </div>
+          <div class="form-group col-6">
+            <label for="boat_type">Veneen tyyppi</label>        
+            <input type="text" class="form-control" name="boat_type" id="boat_type" required>
+          </div>
+          <div class="form-group col-6">
+            <label for="boat_year">Rakennusvuosi</label>        
+            <input type="number" class="form-control" name="boat_year" id="boat_year" required>
+          </div>
+          <div class="form-group col-6">
+            <label for="boat_description">Kuvaus</label>        
+            <textarea class="form-control" rows="3" name="boat_description" id="boat_description"></textarea>
+            <p>
+              <span id="charCount">0</span>/300 merkkiä
+            </p>  
+            <script 
+              src="../static/js/charCount.js" 
+              textField="boat_description" 
+              charCount="charCount" 
+              max="300">
+            </script>
+          </div>
+          <div class="form-group col-6">
+            <button type="submit" class="btn btn-primary">Lisää vene</button>
+          </div>  
+        </form>     
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="joinBoat">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+        Liity veneeseen
+      </button>
+    </h2>
+    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="joinBoat" data-bs-parent="#accordionTransactions">
+      <div class="accordion-body">
+        <form action="/joinboat" method="POST">
+          <div class="form-group col-6">
+            <label for="boat_name">Veneen avainkoodi</label>        
+            <input type="text" class="form-control" name="boat_key" id="boat_key">
+          </div>
+          <div class="form-group col-6">
+            <button type="submit" class="btn btn-primary">Liity veneeseen</button>
+          </div>  
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
 {% endblock %}
+
+
