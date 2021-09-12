@@ -9,19 +9,20 @@ def boats_view():
     # to-do 
     # 1. show info on current boat
 
-    if session['boat']['id'] == '':
-        current_boat = None
-    else:
-        sql = '''SELECT name, type, year, description FROM boats WHERE id=:session_boat'''
-        result = db.session.execute(sql, {'session_boat': session['boat']['id']})
-        db.session.commit()
-        current_boat = result.fetchone()
-
+    
     # 1.1. get owners of current boat and info on whether they are admins for the boat
     if session['boat']['id'] == '':
         current_boat = None
         owners=None
+        boat_admin=None
     else:
+        # get info on current / session boat
+        sql = '''SELECT id, name, type, year, description FROM boats WHERE id=:session_boat'''
+        result = db.session.execute(sql, {'session_boat': session['boat']['id']})
+        db.session.commit()
+        current_boat = result.fetchone()
+    
+        # get owners and admin status for current / session boat
         sql = '''SELECT first_name, last_name, boat_admin 
                     FROM (
                         SELECT users.first_name, users.last_name, owners.boat_admin, owners.boat_id 
@@ -30,20 +31,20 @@ def boats_view():
                         ) AS boat_owners 
                         WHERE boat_owners.boat_id=:session_boat
                 '''
-        
         result = db.session.execute(sql, {'session_boat': session['boat']['id']})
         db.session.commit()
         owners = result.fetchall()
 
+        # is the current user an admin of the current boat?
+        sql = '''SELECT boat_admin FROM owners WHERE (user_id=:session_user AND boat_id=:session_boat)'''
+        result = db.session.execute(sql, {'session_user': session['user']['id'], 'session_boat': session['boat']['id']})
+        db.session.commit()
+        is_admin = result.fetchone()
     
-
-    # for showing who is administrator, something like this is needed
-    # SELECT first_name, boat_admin FROM (SELECT users.first_name, owners.boat_admin, owners.boat_id FROM users JOIN owners ON users.id = owners.user_id) AS foo WHERE foo.boat_id = 10;
-
     # 2. change to another boat
     # 3. delete boat?
 
-    return render_template('boats.html', current_boat=current_boat, owners=owners)
+    return render_template('boats.html', current_boat=current_boat, owners=owners, is_admin=is_admin)
 
 
 def addboat_view():

@@ -6,6 +6,7 @@ from views.login import login_view, loginuser_view
 from views.register import register_view, registeruser_view
 from views.logout import logout_view
 from views.boats import boats_view, addboat_view, joinboat_view
+from views.manageboat import manageboat_view
 
 
 # TEMPLATES
@@ -68,3 +69,9 @@ def addboat():
 @login_required
 def joinboat():
     return joinboat_view()
+
+from flask import render_template
+@app.route('/manageboat/<int:id>', methods=['GET'])
+@login_required
+def manageboat(id):
+    return manageboat_view(id)

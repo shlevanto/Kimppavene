@@ -13,11 +13,12 @@
       <th scope="col">Rakennusvuosi</th>
       <th scope="col">Omistajat</th>
       <th scope="col">Ylläpitäjä</th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      {% if current_boat %}  
+      {% if current_boat %}
         <th>{{ current_boat.name }}</td>
         <td>{{ current_boat.type }}</td>
         <td>{{ current_boat.year }}</td>
@@ -34,10 +35,16 @@
             </br> 
           {% endfor %}
         </td>
+        <td>
+          {% if is_admin %}
+            <a href="/manageboat/{{ current_boat.id }}" class="btn btn-primary" role="button">Muokkaa</a>
+          {% endif %} 
+        </td>
       {% endif %}
     </tr>
   </tbody>
 </table>
+
 List of boats with button to choose.
 <!-- Accordions for add boat and join boat -->
 
