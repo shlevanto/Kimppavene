@@ -17,23 +17,29 @@ def boats_view():
         db.session.commit()
         current_boat = result.fetchone()
 
-    # 1.1. get owners of current boat
+    # 1.1. get owners of current boat and info on whether they are admins for the boat
     if session['boat']['id'] == '':
         current_boat = None
         owners=None
     else:
-        sql = '''SELECT first_name, last_name 
-                    FROM users 
-                    WHERE id 
-                    IN (
-                        SELECT user_id FROM owners WHERE boat_id=:session_boat
-                        )
-        '''
+        sql = '''SELECT first_name, last_name, boat_admin 
+                    FROM (
+                        SELECT users.first_name, users.last_name, owners.boat_admin, owners.boat_id 
+                            FROM users 
+                        JOIN owners ON users.id = owners.user_id
+                        ) AS boat_owners 
+                        WHERE boat_owners.boat_id=:session_boat
+                '''
+        
         result = db.session.execute(sql, {'session_boat': session['boat']['id']})
         db.session.commit()
         owners = result.fetchall()
 
-    # sql = '''SELECT '''
+    
+
+    # for showing who is administrator, something like this is needed
+    # SELECT first_name, boat_admin FROM (SELECT users.first_name, owners.boat_admin, owners.boat_id FROM users JOIN owners ON users.id = owners.user_id) AS foo WHERE foo.boat_id = 10;
+
     # 2. change to another boat
     # 3. delete boat?
 

@@ -18,10 +18,22 @@
   <tbody>
     <tr>
       {% if current_boat %}  
-      <th>{{current_boat.name}}</td>
-      <td>{{current_boat.type}}</td>
-      <td>{{current_boat.year}}</td>
-      <td>{% for owner in owners %} {{ owner.first_name }} {{ owner.last_name }} </br> {% endfor %}</td>
+        <th>{{ current_boat.name }}</td>
+        <td>{{ current_boat.type }}</td>
+        <td>{{ current_boat.year }}</td>
+        <td>
+          {% for owner in owners %} 
+            {{ owner.first_name }} {{ owner.last_name }} </br> 
+          {% endfor %}
+        </td>
+        <td>
+          {% for owner in owners %} 
+            {% if owner.boat_admin == True %} 
+              X
+            {% endif %} 
+            </br> 
+          {% endfor %}
+        </td>
       {% endif %}
     </tr>
   </tbody>
