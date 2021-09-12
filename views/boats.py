@@ -2,7 +2,7 @@ from flask import render_template, request, session, redirect, flash
 from secrets import token_hex
 from db import db
 from datetime import date
-from utils import validate_length
+from utils import validate_length, validate_year
 
 
 def boats_view():
@@ -14,7 +14,7 @@ def boats_view():
     if session['boat']['id'] == '':
         current_boat = None
         owners=None
-        boat_admin=None
+        is_admin=None
     else:
         # get info on current / session boat
         sql = '''SELECT id, name, type, year, description FROM boats WHERE id=:session_boat'''
@@ -41,11 +41,26 @@ def boats_view():
         db.session.commit()
         is_admin = result.fetchone()
     
-    # 2. change to another boat
-    # 3. delete boat?
+    # 2. get all boats of a user 
+    sql = '''SELECT boats.name, boats.id FROM boats JOIN owners ON boats.id=owners.boat_id WHERE owners.user_id=:session_user'''
+    result = db.session.execute(sql, {'session_user': session['user']['id']})
+    db.session.commit()
+    user_boats = result.fetchall()
 
-    return render_template('boats.html', current_boat=current_boat, owners=owners, is_admin=is_admin)
+    print(user_boats)
 
+    return render_template('boats.html', current_boat=current_boat, owners=owners, is_admin=is_admin, user_boats=user_boats)
+
+
+def chooseboat_view():
+    boat_id = request.form['boat_id']
+    boat_name = request.form['boat_name']
+    
+    session['boat'] = {'id': boat_id,
+                        'name': boat_name
+                    }
+    return redirect('/boats')
+    
 
 def addboat_view():
     user_id = session['user']['id']

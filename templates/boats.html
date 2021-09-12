@@ -55,7 +55,16 @@
     </h2>
     <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="chooseBoat" data-bs-parent="#accordionBoats">
       <div class="accordion-body">
-        Tähän tulee luettelo veneistäsi ja valintanappi jokaisen perään.     
+        {% for boat in user_boats%}
+          <form action="/chooseboat" method="POST">
+            <div class="form-group col-6">
+              <input type="text" class="form-control" name="boat_id" id="boat_id" value={{ boat.id }} hidden>
+              <input type="text" class="form-control" name="boat_name" id="boat_name" value="{{ boat.name }}">   
+              <button type="submit" class="btn btn-primary">Valitse</button>
+              {{ boat.name }}
+            </div>
+          </form>
+        {% endfor %}
       </div>
     </div>
   </div>
@@ -108,7 +117,7 @@
         Liity veneeseen
       </button>
     </h2>
-    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="joinBoat" data-bs-parent="#accordionTransactions">
+    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="joinBoat" data-bs-parent="#accordionBoats">
       <div class="accordion-body">
         <form action="/joinboat" method="POST">
           <div class="form-group col-6">
