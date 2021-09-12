@@ -24,3 +24,6 @@ Kimppavene on sovellus yhteisomistuksessa olevan veneen käyttövuorojen, talkoo
 - Käyttäjä voi tehdä veneelle vuotuisen budjetin, jonka toteutumista voidaan seurata raporttinäkymässä.
 - Varauskalenteri, jossa osakkaat voivat varata veneen käyttövuoroja.
 - Varauskalenterin tapahtuman voi merkitä toteutuneeksi, jolloin se muuttuu tapahtumakirjaukseksi
+
+## Luonnos tietokantakaaviosta
+<img src='CoBoat.png'> </img>
