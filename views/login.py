@@ -44,11 +44,10 @@ def loginuser_view():
             # it should check how many boats the user has
             # if 0 --> redirect to create / join boat
             # if > 1 --> redirect to choose boat
-
+            # this needs to be rethought...
             boat = result.fetchone()
-            
 
-            if boat is not None:
+            if boat:
                 session['boat'] = {
                                 'id': boat.id,
                                 'name': boat.name 
