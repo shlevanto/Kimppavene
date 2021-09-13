@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+
+{% block navitems %}
+{% include "navbar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="accordion" id="accordionTransactions">
+  
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+        Kirjaa käyttö
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionTransactions">
+      <div class="accordion-body">
+        
+        <form action="/addtransaction" method="POST">
+          <div class="form-group col-6">
+              <div class="form check form-switch">
+              <input class="form-check-input" type="checkbox" id="competition">
+              <label class="form-check-label" for="competition">Kilpailu</label>
+            </div>
+dsadsad
+            <label for="started_date">Alkoi</label>        
+            <input type="date" class="form-control" name="started_date" id="started_date" required>
+          </div>
+
+          <div class="form-group col-6">
+            <label for="boat_year">Kesto tunteina</label>        
+            <input type="number" class="form-control" name="amount_h" id="amount_h">
+          </div>
+          tai
+          <div class="form-group col-6">
+            <label for="ended_date">Päättyi</label>        
+            <input type="date" class="form-control" name="ended_date" id="ended_date">
+          </div>
+          <div class="form-group col-6">
+            <label for="users">Osakkaat</label>        
+            <div class="form check form-switch">
+              <input class="form-check-input" type="checkbox" name="user" id="user" value="1" checked>
+              <label class="form-check-label" for="user">CurrentUser</label>
+            </div>
+            <div class="form check form-switch">
+              <input class="form-check-input" type="checkbox" name="user" id="user" value="2">
+              <label class="form-check-label" for="user">OtherUser</label>
+            </div> 
+          </div>
+
+          <div class="form-group col-6">
+            <button type="submit" class="btn btn-primary">Kirjaa</button>
+          </div>  
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        Kirjaa talkootyö
+      </button>
+    </h2>
+    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionTransactions">
+      <div class="accordion-body">
+        
+        <form action="/addboat" method="POST">
+          Here be form    
+        </form>
+      
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+        Kirjaa ostos
+      </button>
+    </h2>
+    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionTransactions">
+      <div class="accordion-body">
+        <form action="/addboat" method="POST">
+          <form action="/addboat" method="POST">
+            Here be form    
+          </form>  
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
