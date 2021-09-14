@@ -7,7 +7,7 @@ from views.register import register_view, registeruser_view
 from views.logout import logout_view
 from views.boats import boats_view, addboat_view, joinboat_view, chooseboat_view
 from views.manageboat import manageboat_view
-from views.transaction import transaction_view, addtransaction_view
+from views.transactions import transactions_view, addusage_view
 
 
 # TEMPLATES
@@ -87,10 +87,10 @@ def chooseboat():
 @app.route('/transactions')
 @login_required
 def transactions():
-    return transaction_view()
+    return transactions_view()
 
 
-@app.route('/addtransaction', methods=['POST'])
+@app.route('/addusage', methods=['POST'])
 @login_required
 def addtransaction():
-    return addtransaction_view()
+    return addusage_view()

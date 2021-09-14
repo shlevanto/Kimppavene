@@ -59,7 +59,7 @@
           <form action="/chooseboat" method="POST">
             <div class="form-group col-6">
               <input type="text" class="form-control" name="boat_id" id="boat_id" value={{ boat.id }} hidden>
-              <input type="text" class="form-control" name="boat_name" id="boat_name" value="{{ boat.name }}">   
+              <input type="text" class="form-control" name="boat_name" id="boat_name" value="{{ boat.name }}" hidden>   
               <button type="submit" class="btn btn-primary">Valitse</button>
               {{ boat.name }}
             </div>

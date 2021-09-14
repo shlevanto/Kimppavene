@@ -1,5 +1,18 @@
+<li class="navbar-brand>">
+  <h4>Kimppavene</h4>
+  {% if session.user %}
+          {{ session.user.first_name }} {{ session.user.last_name }}
+          <!-- A logged in user will see their name and the current boat, session boat feature not yet added -->
+          {% if session.boat %}
+          / {{ session.boat.name }}
+          {% endif %}
+  {% endif %}
+</li>
 <li class="navbar-item">
   <a class="nav-link" href="/">Etusivu</a>
+</li>
+<li>
+  <a class="nav-link" href="/transactions">Tapahtumat</a>
 </li>
 <li class="navbar-item">
   <a class="nav-link" href="/boats">Veneet</a> 

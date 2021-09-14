@@ -14,7 +14,7 @@
   </head>
   
   <body>
-    <div class="container px-8">
+    <div class="container px-6">
       <nav class="navbar navbar-expand-sm navbar-light bg-light">
         <a class="navbar-brand" href="#">
           <img src="/static/images/KV-logo.png" alt="Kimppavene" width="40" height="60" class="d-inline-block align-text-top">
@@ -24,18 +24,8 @@
         </ul>
       </nav>
     </div>  
-    
-    <div class="container px-8">
-      <div class="col-6">
-      {% if session.user %}
-          {{ session.user.first_name }} {{ session.user.last_name }}
-          <!-- A logged in user will see their name and the current boat, session boat feature not yet added -->
-          {% if session.boat %}
-          / {{ session.boat.name }}
-          {% endif %}
-      {% endif %}
-      </div>
-            
+
+    <div>      
       {% with messages = get_flashed_messages() %}
         {% if messages %}
           {% for message in messages %}
@@ -45,12 +35,11 @@
           {% endfor %}
         {% endif %}
       {% endwith %}
-
-      <div class="col-8">
-        {% block content %}{% endblock %}
-      </div>
-   
-  </div>
+    </div>
+    
+    <div class="container px-6">
+      {% block content %}{% endblock %}
+    </div>
     
     <!-- Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
