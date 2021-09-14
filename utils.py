@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import session, redirect
 from datetime import date
-import re
+from datetime import datetime
 
 
 def login_required(f):
@@ -25,3 +25,7 @@ def validate_alphanum(input):
 
 def validate_year(input, min=1800, max=date.today().year):
     return (int(input) >= min) and (int(input) <= max)
+
+
+def parse_html_datetime(input):
+    return datetime.strptime(input, '%Y-%m-%dT%H:%M')
