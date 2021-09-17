@@ -20,8 +20,8 @@
         <form action="/addusage" method="POST">
           <div class="form-group col-6">
             <div class="form check form-switch">
-            <input class="form-check-input" type="checkbox" id="competition">
-            <label class="form-check-label" for="competition">Kilpailu</label>
+            <input class="form-check-input" type="checkbox" id="race">
+            <label class="form-check-label" for="race">Kilpailu</label>
           </div>
           <div class="form-group col-6">
             <label for="started_date">Alkoi</label>        
@@ -66,8 +66,39 @@
     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionTransactions">
       <div class="accordion-body">
         
-        <form action="/addwork" method="POST">
-          Here be form    
+        <form action="/addmaintenance" method="POST">
+          
+          <div class="form-group col-6">
+            <label for="started_date">Alkoi</label>        
+            <input type="datetime-local" class="form-control" name="start_date" id="start_date" required>
+          </div>
+
+          <div class="form-group col-6">
+            <label for="ended_date">Päättyi</label>        
+            <input type="datetime-local" class="form-control" name="end_date" id="end_date">
+          </div>
+          <div class="form-group col-6">
+            <label for="users">Osakkaat</label>        
+            <div class="form check form-switch">
+              <input class="form-check-input" type="checkbox" name="user" id="user" value="{{ session.user.id }}" checked>
+              <label class="form-check-label" for="user">{{ session.user.first_name }} {{ session.user.last_name }}</label>
+            </div>
+          
+            {% for owner in owners %}
+            <div class="form check form-switch">
+              <input class="form-check-input" type="checkbox" name="user" id="user" value="{{ owner.id }}">
+              <label class="form-check-label" for="user">{{ owner.first_name }} {{ owner.last_name}}</label>
+            </div>
+            {% endfor %} 
+          </div>
+
+          <div>
+          <label for="description">Kuvaus</label>        
+            <input type="text" class="form-control" name="description" id="description" required>
+          </div>
+          <div class="form-group col-6">
+            <button type="submit" class="btn btn-primary">Kirjaa</button>
+          </div>              
         </form>
       
       </div>
@@ -90,4 +121,5 @@
   </div>
 
 </div>
+
 {% endblock %}
