@@ -41,7 +41,6 @@ def loginuser_view():
             sql = '''SELECT name, id FROM boats  WHERE id = (SELECT boat_id FROM owners WHERE user_id=:user_id LIMIT 1)'''
             result = db.session.execute(sql, {'user_id': user.id})
             # this now selects the first boat of the owner
-            # it should check how many boats the user has
             # if 0 --> redirect to create / join boat
             # if > 1 --> redirect to choose boat
             # this needs to be rethought...
@@ -56,6 +55,7 @@ def loginuser_view():
             else: 
                 session['boat'] = {'id':'',
                                     'name':''}
+                flash('Sinulla ei ole vielä veneitä järjestelmässä. Luo uusi vene tai liity olemassaolevaan veneeseen avainkoodilla.')
                 return redirect('/boats')
         else:
             flash('Virheellinen käyttäjätunnus tai salasana.')

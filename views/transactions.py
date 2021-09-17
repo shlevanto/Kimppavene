@@ -4,6 +4,10 @@ from db import db
 from utils import parse_html_datetime, validate_length
 
 def transactions_view():
+    if session['boat']['id'] == '':
+        flash('Sinulla ei ole vielä veneitä järjestelmässä. Luo uusi vene tai liity olemassaolevaan veneeseen avainkoodilla.')
+        return redirect('/boats')
+
     # session user is used by default, include other owners of boat too
     sql = '''SELECT first_name, last_name, id 
                     FROM (
@@ -17,13 +21,19 @@ def transactions_view():
     db.session.commit()
     owners = result.fetchall()
 
-    # different cost types
+    # get cost types for forms
     sql = '''SELECT id, type FROM cost_types'''
     result = db.session.execute(sql)
+    db.session.commit()
     cost_types = result.fetchall()
 
+    # get income types for forms
+    sql = '''SELECT id, type FROM income_types'''
+    result = db.session.execute(sql)
+    db.session.commit()
+    income_types = result.fetchall()
     
-    return render_template('transactions.html', owners=owners, cost_types=cost_types)
+    return render_template('transactions.html', owners=owners, income_types=income_types)
 
 
 def addusage_view():
@@ -148,6 +158,6 @@ def addcost_view():
     
     db.session.commit() 
 
-    flash('Kulu lisätty.')
+    flash('Tulo lisätty.')
     return redirect('/transactions')
 

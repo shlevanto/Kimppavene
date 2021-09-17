@@ -6,15 +6,12 @@ from utils import validate_length, validate_year
 
 
 def boats_view():
-    # to-do 
-    # 1. show info on current boat
-
     
     # 1.1. get owners of current boat and info on whether they are admins for the boat
     if session['boat']['id'] == '':
         current_boat = None
-        owners=None
-        is_admin=None
+        owners = None
+        is_admin = None
     else:
         # get info on current / session boat
         sql = '''SELECT id, name, type, year, description FROM boats WHERE id=:session_boat'''
