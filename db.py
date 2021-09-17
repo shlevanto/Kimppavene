@@ -1,12 +1,10 @@
 from app import app
 from flask_sqlalchemy import SQLAlchemy
-from os import getenv, environ
+from os import getenv
 
 # database configurations
 # dev
-#app.config['SQLALCHEMY_DATABASE_URI'] = getenv('DATABASE_URL')
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL')
-
+app.config['SQLALCHEMY_DATABASE_URI'] = getenv('DATABASE_URL')
 db = SQLAlchemy(app)
 
 # get rid of error message when starting server
