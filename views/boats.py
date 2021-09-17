@@ -80,7 +80,7 @@ def addboat_view():
         return redirect('/boats')
     
     # Inserts new boat, uses the new id to insert ownership
-    # a default 12 days of usage is added when creating a boat
+    # a default 12 days = 288 hours of usage is added when creating a boat
     
     sql = '''
             WITH new_boat_id AS (
@@ -92,7 +92,7 @@ def addboat_view():
                 VALUES (
                     :user_id, (
                         SELECT id FROM new_boat_id
-                        ), TRUE, 12
+                        ), TRUE, 288
                     )
                 '''
         # there is a small possibility that two keys are identical
@@ -139,7 +139,7 @@ def joinboat_view():
         flash('Avaimella ei löydy venettä.')
         return redirect('/boats')
 
-    # a default 12 days of usage is added when creating a boat
+    # a default 12 days = 288 hours of usage is added when creating a boat
     sql = '''INSERT INTO owners (boat_id, user_id, usage) VALUES ((SELECT id FROM boats WHERE key=:key), :user_id, 12)'''
 
     try: 
