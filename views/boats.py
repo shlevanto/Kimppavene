@@ -85,11 +85,11 @@ def addboat_view():
                     VALUES (:boat_name, :boat_type, :boat_year, :boat_description, :key)
                     RETURNING id
                     )
-                INSERT INTO owners (user_id, boat_id, boat_admin)
+                INSERT INTO owners (user_id, boat_id, boat_admin, usage)
                 VALUES (
                     :user_id, (
                         SELECT id FROM new_boat_id
-                        ), TRUE
+                        ), TRUE, 12
                     )
                 '''
         # there is a small possibility that two keys are identical
@@ -137,7 +137,7 @@ def joinboat_view():
         return redirect('/boats')
 
     # add a try except here
-    sql = '''INSERT INTO owners (boat_id, user_id) VALUES ((SELECT id FROM boats WHERE key=:key), :user_id)'''
+    sql = '''INSERT INTO owners (boat_id, user_id, usage) VALUES ((SELECT id FROM boats WHERE key=:key), :user_id, 12)'''
 
     try: 
         db.session.execute(sql, {'key': key, 'user_id': user_id})
