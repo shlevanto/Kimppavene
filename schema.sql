@@ -59,14 +59,84 @@ ALTER SEQUENCE public.boats_id_seq OWNED BY public.boats.id;
 
 
 --
+-- Name: cost_types; Type: TABLE; Schema: public; Owner: levantsi
+--
+
+CREATE TABLE public.cost_types (
+    id integer NOT NULL,
+    type text
+);
+
+
+ALTER TABLE public.cost_types OWNER TO levantsi;
+
+--
+-- Name: cost_types_id_seq; Type: SEQUENCE; Schema: public; Owner: levantsi
+--
+
+CREATE SEQUENCE public.cost_types_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.cost_types_id_seq OWNER TO levantsi;
+
+--
+-- Name: cost_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: levantsi
+--
+
+ALTER SEQUENCE public.cost_types_id_seq OWNED BY public.cost_types.id;
+
+
+--
+-- Name: income_types; Type: TABLE; Schema: public; Owner: levantsi
+--
+
+CREATE TABLE public.income_types (
+    id integer NOT NULL,
+    type text
+);
+
+
+ALTER TABLE public.income_types OWNER TO levantsi;
+
+--
+-- Name: income_types_id_seq; Type: SEQUENCE; Schema: public; Owner: levantsi
+--
+
+CREATE SEQUENCE public.income_types_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.income_types_id_seq OWNER TO levantsi;
+
+--
+-- Name: income_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: levantsi
+--
+
+ALTER SEQUENCE public.income_types_id_seq OWNED BY public.income_types.id;
+
+
+--
 -- Name: owners; Type: TABLE; Schema: public; Owner: levantsi
 --
 
 CREATE TABLE public.owners (
     id integer NOT NULL,
-    user_id integer NOT NULL,
-    boat_id integer NOT NULL,
-    boat_admin boolean
+    user_id integer,
+    boat_id integer,
+    boat_admin boolean,
+    usage_right numeric,
+    usage_hours numeric
 );
 
 
@@ -95,25 +165,13 @@ ALTER SEQUENCE public.owners_id_seq OWNED BY public.owners.id;
 
 
 --
--- Name: pie; Type: TABLE; Schema: public; Owner: levantsi
---
-
-CREATE TABLE public.pie (
-    name text,
-    id numeric
-);
-
-
-ALTER TABLE public.pie OWNER TO levantsi;
-
---
 -- Name: time_rates; Type: TABLE; Schema: public; Owner: levantsi
 --
 
 CREATE TABLE public.time_rates (
     id integer NOT NULL,
-    start_week integer,
-    end_week integer,
+    start_week numeric,
+    end_week numeric,
     ratio numeric
 );
 
@@ -149,12 +207,17 @@ ALTER SEQUENCE public.time_rates_id_seq OWNED BY public.time_rates.id;
 CREATE TABLE public.transactions (
     id integer NOT NULL,
     created timestamp without time zone,
-    usage integer,
+    usage_id integer,
     amount numeric,
     user_id integer,
+    boat_id integer,
     unit integer,
-    started_date date NOT NULL,
-    boat_id integer
+    start_date timestamp without time zone NOT NULL,
+    end_date timestamp without time zone NOT NULL,
+    race boolean,
+    description text,
+    cost_type_id integer,
+    income_type_id integer
 );
 
 
@@ -188,7 +251,7 @@ ALTER SEQUENCE public.transactions_id_seq OWNED BY public.transactions.id;
 
 CREATE TABLE public.units (
     id integer NOT NULL,
-    type text
+    unit text
 );
 
 
@@ -222,7 +285,7 @@ ALTER SEQUENCE public.units_id_seq OWNED BY public.units.id;
 
 CREATE TABLE public.usage (
     id integer NOT NULL,
-    type text
+    usage_type text
 );
 
 
@@ -296,6 +359,20 @@ ALTER TABLE ONLY public.boats ALTER COLUMN id SET DEFAULT nextval('public.boats_
 
 
 --
+-- Name: cost_types id; Type: DEFAULT; Schema: public; Owner: levantsi
+--
+
+ALTER TABLE ONLY public.cost_types ALTER COLUMN id SET DEFAULT nextval('public.cost_types_id_seq'::regclass);
+
+
+--
+-- Name: income_types id; Type: DEFAULT; Schema: public; Owner: levantsi
+--
+
+ALTER TABLE ONLY public.income_types ALTER COLUMN id SET DEFAULT nextval('public.income_types_id_seq'::regclass);
+
+
+--
 -- Name: owners id; Type: DEFAULT; Schema: public; Owner: levantsi
 --
 
@@ -342,19 +419,37 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 COPY public.boats (id, name, type, year, description, key) FROM stdin;
-1	Merenhuiske	H-vene	1975	Hassunhauska H	abc
-2	La Mila	Targa 96	1982	Moottoripursi	xyz
-5	Mama Cass	Omega 34	1981	Meidän	ac7e73
-6	Mama Cass	Omega 34	1981	Meidän	e46aa9
-7	Mama Cass	Omega 34	5	fds	82ac13
-8	n	n	1981	fdsasd	d43703
-9	Ilderim	8mR	1925	Hiäno!	8b55c2
-10	Ilderim	8mR	1925	Hiäno!	4d43ad
-11	Kuin Meri	Storbåt	1990	Vanhan oloinen	1234
-12	HurenMeiske	puu	1901		eab47e
-13	Nils	X-99	1999	Kisapaatti	bc9224
-14	Nals	X-99	1991		123
-63	a	a	1		e77d39
+10	Mama Cass	Omega 34	1982	Hiäno!	2504ee
+11	La Mila	Targa 96	1970	Myyty	f68718
+12	Balboa	Rock 20	1979	Pieni mutta pippurinen	c28f2f
+13	Newstart	Omega 34	1981	Lainassa	515917
+\.
+
+
+--
+-- Data for Name: cost_types; Type: TABLE DATA; Schema: public; Owner: levantsi
+--
+
+COPY public.cost_types (id, type) FROM stdin;
+1	Huolto ja ylläpito
+2	Korjaukset
+3	Uushankinnat
+4	Laituripaikka ja telakointi
+5	Talkoot ja juhlat
+6	Kilpailu
+7	Myynti
+\.
+
+
+--
+-- Data for Name: income_types; Type: TABLE DATA; Schema: public; Owner: levantsi
+--
+
+COPY public.income_types (id, type) FROM stdin;
+1	Myyntitulo
+2	Vuokra
+3	Lahjoitus
+4	Ylimääräinen vastike
 \.
 
 
@@ -362,29 +457,14 @@ COPY public.boats (id, name, type, year, description, key) FROM stdin;
 -- Data for Name: owners; Type: TABLE DATA; Schema: public; Owner: levantsi
 --
 
-COPY public.owners (id, user_id, boat_id, boat_admin) FROM stdin;
-1	1	1	t
-2	4	2	f
-3	1	10	t
-4	4	11	\N
-5	4	12	\N
-6	4	12	t
-\.
-
-
---
--- Data for Name: pie; Type: TABLE DATA; Schema: public; Owner: levantsi
---
-
-COPY public.pie (name, id) FROM stdin;
-paavo	1
-paavo	1
-\N	2
-paavo	1
-Pentti	2
-paavo	1
-paavo	1
-pentti	1
+COPY public.owners (id, user_id, boat_id, boat_admin, usage_right, usage_hours) FROM stdin;
+31	2	12	t	\N	288
+32	2	\N	\N	\N	288
+33	2	\N	\N	\N	288
+34	2	13	t	\N	282.0
+27	2	10	t	\N	288.0
+30	11	10	\N	\N	287.0
+28	2	11	t	\N	303
 \.
 
 
@@ -400,9 +480,19 @@ COPY public.time_rates (id, start_week, end_week, ratio) FROM stdin;
 -- Data for Name: transactions; Type: TABLE DATA; Schema: public; Owner: levantsi
 --
 
-COPY public.transactions (id, created, usage, amount, user_id, unit, started_date, boat_id) FROM stdin;
-2	2021-09-02 22:41:01.41308	1	3	1	1	2021-08-31	1
-3	2021-09-02 22:41:31.21726	2	3	1	1	2021-08-31	1
+COPY public.transactions (id, created, usage_id, amount, user_id, boat_id, unit, start_date, end_date, race, description, cost_type_id, income_type_id) FROM stdin;
+2	2021-09-17 17:13:03.585125	1	2	2	13	\N	2021-09-17 17:10:00	2021-09-17 19:10:00	f	\N	\N	\N
+3	2021-09-17 17:15:33.399699	1	2	2	13	\N	2021-09-17 17:10:00	2021-09-17 19:10:00	f	\N	\N	\N
+4	2021-09-17 17:15:44.48842	1	2	2	13	\N	2021-09-17 17:10:00	2021-09-17 19:10:00	f	\N	\N	\N
+5	2021-09-17 17:20:12.990234	1	2	2	10	\N	2021-09-17 17:19:00	2021-09-17 19:20:00	f	\N	\N	\N
+6	2021-09-17 17:20:13.004451	1	2	11	10	\N	2021-09-17 17:19:00	2021-09-17 19:20:00	f	\N	\N	\N
+7	2021-09-17 17:42:50.054823	2	0	2	11	\N	2021-09-17 17:42:00	2021-09-17 17:42:00	\N	\N	\N	\N
+8	2021-09-17 17:56:41.812078	2	1	2	11	\N	2021-09-17 17:55:00	2021-09-17 18:55:00	\N	foi	\N	\N
+9	2021-09-17 17:57:38.963658	2	1	2	11	\N	2021-09-17 17:57:00	2021-09-17 18:57:00	\N	foi	\N	\N
+10	2021-09-17 17:58:41.173897	2	1	2	11	\N	2021-09-17 17:58:00	2021-09-17 18:58:00	\N	foi	\N	\N
+11	2021-09-17 17:59:36.891062	2	1	2	11	\N	2021-09-24 17:59:00	2021-09-24 18:59:00	\N	foi	\N	\N
+12	2021-09-17 18:01:43.454921	2	1	2	11	\N	2021-09-17 18:00:00	2021-09-17 19:00:00	\N	joi	\N	\N
+14	2021-09-17 18:49:25.300989	3	133.33	2	11	\N	2021-09-17 18:46:00	2021-09-17 18:46:00	\N	heijaa	1	\N
 \.
 
 
@@ -410,8 +500,7 @@ COPY public.transactions (id, created, usage, amount, user_id, unit, started_dat
 -- Data for Name: units; Type: TABLE DATA; Schema: public; Owner: levantsi
 --
 
-COPY public.units (id, type) FROM stdin;
-1	tuntia
+COPY public.units (id, unit) FROM stdin;
 \.
 
 
@@ -419,9 +508,10 @@ COPY public.units (id, type) FROM stdin;
 -- Data for Name: usage; Type: TABLE DATA; Schema: public; Owner: levantsi
 --
 
-COPY public.usage (id, type) FROM stdin;
+COPY public.usage (id, usage_type) FROM stdin;
 1	sailing
-2	working
+2	maintenance
+3	costs
 \.
 
 
@@ -430,10 +520,9 @@ COPY public.usage (id, type) FROM stdin;
 --
 
 COPY public.users (id, username, password, first_name, last_name, email) FROM stdin;
-1	bob	pbkdf2:sha256:260000$OdZExH0D2OcOPKem$e63ab8f22267db17de83aa18ee9e98b84f66edcde967448dbfbbc3e46421c6cf	Robert	Paulson	project.mayhem@paperstreet.com
-4	muumipappa	pbkdf2:sha256:260000$tMVl873ZHmzmM62f$99d363d01f6a2829813e5c81345935b04c11116e925b32391bca9b041f19b7fd	Muumi	Pappa	moomindaddy69@yahoo.com
-7	niilo	pbkdf2:sha256:260000$4xxT7q9jL98iJXyR$0e25e99c9cf9fced0e26b0e0b48a42c84c39779235ed08582a615bab67e45202	Niilo	Niilonen	nii@lo.fi
-8	folkewest	pbkdf2:sha256:260000$EaGsKxJWOwuAOB6j$f46be7c12a263185130765339cac12c531bc6a51026c41dd0a4173625f2b3f90	Folke	West	folke@yle.fi
+2	bob	pbkdf2:sha256:260000$XpLaRKoZiu2m9Cmf$eedc7f133104440629d6f1deaea2ae84de3fffc57c3702f0463a3d81f3ba8ac4	Robert	Paulson	bigbob@paperstreet.co
+11	muumipappa	pbkdf2:sha256:260000$ZWihMDTxeEo284ke$78dee4912c63237bf1cfa84d1e8e95b8a405a5ce226a3e57304f47790a17f5ba	Muumi	Pappa	muumi@huumi.fi
+13	bib	pbkdf2:sha256:260000$EHrSa7dLdxLbJCpV$b1468d47e44f2b74987126c9867dafd7247460227b521bbc5a145b150ab60181	Bill	Bibbit	bi@bi.bi
 \.
 
 
@@ -441,14 +530,28 @@ COPY public.users (id, username, password, first_name, last_name, email) FROM st
 -- Name: boats_id_seq; Type: SEQUENCE SET; Schema: public; Owner: levantsi
 --
 
-SELECT pg_catalog.setval('public.boats_id_seq', 64, true);
+SELECT pg_catalog.setval('public.boats_id_seq', 13, true);
+
+
+--
+-- Name: cost_types_id_seq; Type: SEQUENCE SET; Schema: public; Owner: levantsi
+--
+
+SELECT pg_catalog.setval('public.cost_types_id_seq', 7, true);
+
+
+--
+-- Name: income_types_id_seq; Type: SEQUENCE SET; Schema: public; Owner: levantsi
+--
+
+SELECT pg_catalog.setval('public.income_types_id_seq', 4, true);
 
 
 --
 -- Name: owners_id_seq; Type: SEQUENCE SET; Schema: public; Owner: levantsi
 --
 
-SELECT pg_catalog.setval('public.owners_id_seq', 75, true);
+SELECT pg_catalog.setval('public.owners_id_seq', 35, true);
 
 
 --
@@ -462,28 +565,28 @@ SELECT pg_catalog.setval('public.time_rates_id_seq', 1, false);
 -- Name: transactions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: levantsi
 --
 
-SELECT pg_catalog.setval('public.transactions_id_seq', 3, true);
+SELECT pg_catalog.setval('public.transactions_id_seq', 14, true);
 
 
 --
 -- Name: units_id_seq; Type: SEQUENCE SET; Schema: public; Owner: levantsi
 --
 
-SELECT pg_catalog.setval('public.units_id_seq', 1, true);
+SELECT pg_catalog.setval('public.units_id_seq', 1, false);
 
 
 --
 -- Name: usage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: levantsi
 --
 
-SELECT pg_catalog.setval('public.usage_id_seq', 2, true);
+SELECT pg_catalog.setval('public.usage_id_seq', 3, true);
 
 
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: levantsi
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 8, true);
+SELECT pg_catalog.setval('public.users_id_seq', 13, true);
 
 
 --
@@ -495,11 +598,19 @@ ALTER TABLE ONLY public.boats
 
 
 --
--- Name: boats key; Type: CONSTRAINT; Schema: public; Owner: levantsi
+-- Name: cost_types cost_types_pkey; Type: CONSTRAINT; Schema: public; Owner: levantsi
 --
 
-ALTER TABLE ONLY public.boats
-    ADD CONSTRAINT key UNIQUE (key);
+ALTER TABLE ONLY public.cost_types
+    ADD CONSTRAINT cost_types_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: income_types income_types_pkey; Type: CONSTRAINT; Schema: public; Owner: levantsi
+--
+
+ALTER TABLE ONLY public.income_types
+    ADD CONSTRAINT income_types_pkey PRIMARY KEY (id);
 
 
 --
@@ -543,11 +654,11 @@ ALTER TABLE ONLY public.usage
 
 
 --
--- Name: users username; Type: CONSTRAINT; Schema: public; Owner: levantsi
+-- Name: users username_unique; Type: CONSTRAINT; Schema: public; Owner: levantsi
 --
 
 ALTER TABLE ONLY public.users
-    ADD CONSTRAINT username UNIQUE (username);
+    ADD CONSTRAINT username_unique UNIQUE (username);
 
 
 --
@@ -559,51 +670,67 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: owners fk_boat; Type: FK CONSTRAINT; Schema: public; Owner: levantsi
+-- Name: owners boat_fk; Type: FK CONSTRAINT; Schema: public; Owner: levantsi
 --
 
 ALTER TABLE ONLY public.owners
-    ADD CONSTRAINT fk_boat FOREIGN KEY (boat_id) REFERENCES public.boats(id);
+    ADD CONSTRAINT boat_fk FOREIGN KEY (boat_id) REFERENCES public.boats(id);
 
 
 --
--- Name: transactions fk_boat; Type: FK CONSTRAINT; Schema: public; Owner: levantsi
+-- Name: transactions boat_id; Type: FK CONSTRAINT; Schema: public; Owner: levantsi
 --
 
 ALTER TABLE ONLY public.transactions
-    ADD CONSTRAINT fk_boat FOREIGN KEY (boat_id) REFERENCES public.boats(id);
+    ADD CONSTRAINT boat_id FOREIGN KEY (boat_id) REFERENCES public.boats(id);
 
 
 --
--- Name: owners fk_user; Type: FK CONSTRAINT; Schema: public; Owner: levantsi
+-- Name: transactions cost_type; Type: FK CONSTRAINT; Schema: public; Owner: levantsi
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT cost_type FOREIGN KEY (cost_type_id) REFERENCES public.cost_types(id);
+
+
+--
+-- Name: transactions income_type; Type: FK CONSTRAINT; Schema: public; Owner: levantsi
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT income_type FOREIGN KEY (income_type_id) REFERENCES public.income_types(id);
+
+
+--
+-- Name: transactions unit_id; Type: FK CONSTRAINT; Schema: public; Owner: levantsi
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT unit_id FOREIGN KEY (unit) REFERENCES public.units(id);
+
+
+--
+-- Name: transactions usage_id; Type: FK CONSTRAINT; Schema: public; Owner: levantsi
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT usage_id FOREIGN KEY (usage_id) REFERENCES public.usage(id);
+
+
+--
+-- Name: owners user_fk; Type: FK CONSTRAINT; Schema: public; Owner: levantsi
 --
 
 ALTER TABLE ONLY public.owners
-    ADD CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES public.users(id);
+    ADD CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
--- Name: transactions transactions_unit_fkey; Type: FK CONSTRAINT; Schema: public; Owner: levantsi
---
-
-ALTER TABLE ONLY public.transactions
-    ADD CONSTRAINT transactions_unit_fkey FOREIGN KEY (unit) REFERENCES public.units(id);
-
-
---
--- Name: transactions transactions_usage_fkey; Type: FK CONSTRAINT; Schema: public; Owner: levantsi
+-- Name: transactions user_id; Type: FK CONSTRAINT; Schema: public; Owner: levantsi
 --
 
 ALTER TABLE ONLY public.transactions
-    ADD CONSTRAINT transactions_usage_fkey FOREIGN KEY (usage) REFERENCES public.usage(id);
-
-
---
--- Name: transactions transactions_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: levantsi
---
-
-ALTER TABLE ONLY public.transactions
-    ADD CONSTRAINT transactions_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+    ADD CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
