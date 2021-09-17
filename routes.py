@@ -1,5 +1,5 @@
 from app import app
-from utils import login_required, boat_required
+from utils import login_required
 
 from views.index import index_view
 from views.login import login_view, loginuser_view
