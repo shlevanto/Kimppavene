@@ -16,8 +16,14 @@ def transactions_view():
     result = db.session.execute(sql, {'session_boat': session['boat']['id'], 'session_user': session['user']['id']})
     db.session.commit()
     owners = result.fetchall()
+
+    # different cost types
+    sql = '''SELECT id, type FROM cost_types'''
+    result = db.session.execute(sql)
+    cost_types = result.fetchall()
+
     
-    return render_template('transactions.html', owners=owners)
+    return render_template('transactions.html', owners=owners, cost_types=cost_types)
 
 
 def addusage_view():
@@ -25,16 +31,19 @@ def addusage_view():
     # if both durations are empty, rerender with error message
     users = request.form.getlist('user')
     
-    # handling datetimes is a bit tricky
     start_datetime = parse_html_datetime(request.form['start_date'])
     end_datetime = parse_html_datetime(request.form['end_date'])
     
+    if start_datetime > end_datetime:
+        flash('Aloitusajankohta ei voi olla päättymisajankohdan jälkeen.')
+        return redirect('/transactions')
+
     if 'race' in request.form:
         race = request.form['race']
     else:
         race = False
 
-    # why does timedelta give days and seconds... that's just weird
+    # timedelta substractions give time in seconds and days so we need to make it hours
     duration = (end_datetime - start_datetime)
     duration_hours = (duration.seconds // 3600) + (duration.days * 24)
 
@@ -77,11 +86,14 @@ def addmaintenance_view():
 
     # check the description input
 
-    # handling datetimes is a bit tricky
     start_datetime = parse_html_datetime(request.form['start_date'])
     end_datetime = parse_html_datetime(request.form['end_date'])
     
-    # why does timedelta give days and seconds... that's just weird
+    if start_datetime > end_datetime:
+        flash('Aloitusajankohta ei voi olla päättymisajankohdan jälkeen.')
+        return redirect('/transactions')
+    
+    # timedelta substractions give time in seconds and days so we need to make it hours
     duration = (end_datetime - start_datetime)
     duration_hours = (duration.seconds // 3600) + (duration.days * 24)
     
@@ -110,3 +122,32 @@ def addmaintenance_view():
     
     flash('Talkootyö lisätty.')
     return redirect('/transactions')
+
+
+def addcost_view():
+    amount = request.form['amount']
+    cost_type = request.form['cost_type']
+    description = request.form['description']
+
+    if float(amount) <= 0:
+        flash('Kulun on oltava suurempi kuin 0.')
+        return redirect('/transactions')
+    
+
+    start_datetime = parse_html_datetime(request.form['start_date'])
+    end_datetime = start_datetime
+    
+    sql = '''INSERT INTO transactions (user_id, boat_id, created, usage_id, amount, start_date, end_date, description, cost_type_id) 
+                    VALUES (:user_id, :boat_id, NOW(), 3, :amount, :start_date, :end_date, :description, :cost_type)  '''    
+    
+    db.session.execute(sql, {
+            'user_id': session['user']['id'], 'boat_id': session['boat']['id'], 
+            'amount':amount, 'start_date': start_datetime, 'end_date': end_datetime,
+            'description': description, 'cost_type': cost_type
+        })
+    
+    db.session.commit() 
+
+    flash('Kulu lisätty.')
+    return redirect('/transactions')
+
