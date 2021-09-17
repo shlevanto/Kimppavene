@@ -78,7 +78,10 @@ def addboat_view():
     if not (validate_year(boat_year)):
         flash('Valmistusvuoden on oltava väliltä 1800 - {}.'.format(date.today().year))
         return redirect('/boats')
-        # Inserts new boat, uses the new id to insert ownership
+    
+    # Inserts new boat, uses the new id to insert ownership
+    # a default 12 days of usage is added when creating a boat
+    
     sql = '''
             WITH new_boat_id AS (
                     INSERT INTO boats (name, type, year, description, key)
@@ -136,7 +139,7 @@ def joinboat_view():
         flash('Avaimella ei löydy venettä.')
         return redirect('/boats')
 
-    # add a try except here
+    # a default 12 days of usage is added when creating a boat
     sql = '''INSERT INTO owners (boat_id, user_id, usage) VALUES ((SELECT id FROM boats WHERE key=:key), :user_id, 12)'''
 
     try: 
