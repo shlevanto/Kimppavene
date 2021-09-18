@@ -3,7 +3,8 @@
 ~~-kulujen kirjaaminen~~
 ~~-UUSI tulojen kirjaaminen~~
 - raporttisivu
-- miksi kulukategoriat eivät siirtyneet herokuun?
+- veneen lisäämisen sql:ssä on jonkun taulun nimi väärin, korjaa
+~~- miksi kulukategoriat eivät siirtyneet herokuun?~~
 ~~-kokeile heroku ~~
 - veneen valinta sisäänkirjautumisen yhteydessä
   --> tehty osittain
