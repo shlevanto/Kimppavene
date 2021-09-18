@@ -137,7 +137,7 @@ def joinboat_view():
         return redirect('/boats')
 
     # a default 12 days = 288 hours of usage is added when creating a boat
-    sql = '''INSERT INTO owners (boat_id, user_id, usage) VALUES ((SELECT id FROM boats WHERE key=:key), :user_id, 12)'''
+    sql = '''INSERT INTO owners (boat_id, user_id, usage_hours) VALUES ((SELECT id FROM boats WHERE key=:key), :user_id, 288)'''
 
     try: 
         db.session.execute(sql, {'key': key, 'user_id': user_id})
