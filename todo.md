@@ -1,7 +1,12 @@
 ~~- veneen lisääminen haitarilayoutiin~~
-- tapahtumien kirjaaminen
+~~- tapahtumien kirjaaminen~~
+~~-kulujen kirjaaminen~~
+~~-UUSI tulojen kirjaaminen~~
 - raporttisivu
+- miksi kulukategoriat eivät siirtyneet herokuun?
+~~-kokeile heroku ~~
 - veneen valinta sisäänkirjautumisen yhteydessä
+  --> tehty osittain
 - ylläpitonäkymä veneelle (anna pääkäyttäjäoikeus, muokkaa tietoja)
 - veneen ylläpitäjyyden tarkistaminen voisi tehdä omaksi metodikseen tai viedä sessioon tiedoksi
 ~~- erotetaan routes ja views~~
