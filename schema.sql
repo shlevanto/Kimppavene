@@ -423,6 +423,7 @@ COPY public.boats (id, name, type, year, description, key) FROM stdin;
 11	La Mila	Targa 96	1970	Myyty	f68718
 12	Balboa	Rock 20	1979	Pieni mutta pippurinen	c28f2f
 13	Newstart	Omega 34	1981	Lainassa	515917
+14	a	aa	1980	aa	3863be
 \.
 
 
@@ -465,6 +466,7 @@ COPY public.owners (id, user_id, boat_id, boat_admin, usage_right, usage_hours) 
 27	2	10	t	\N	288.0
 30	11	10	\N	\N	287.0
 28	2	11	t	\N	303
+36	2	14	t	\N	288
 \.
 
 
@@ -493,6 +495,7 @@ COPY public.transactions (id, created, usage_id, amount, user_id, boat_id, unit,
 11	2021-09-17 17:59:36.891062	2	1	2	11	\N	2021-09-24 17:59:00	2021-09-24 18:59:00	\N	foi	\N	\N
 12	2021-09-17 18:01:43.454921	2	1	2	11	\N	2021-09-17 18:00:00	2021-09-17 19:00:00	\N	joi	\N	\N
 14	2021-09-17 18:49:25.300989	3	133.33	2	11	\N	2021-09-17 18:46:00	2021-09-17 18:46:00	\N	heijaa	1	\N
+15	2021-09-18 12:02:52.253902	4	100	2	14	\N	2021-09-18 12:02:00	2021-09-18 12:02:00	\N	faaalaa	\N	1
 \.
 
 
@@ -511,7 +514,8 @@ COPY public.units (id, unit) FROM stdin;
 COPY public.usage (id, usage_type) FROM stdin;
 1	sailing
 2	maintenance
-3	costs
+4	income
+3	cost
 \.
 
 
@@ -531,7 +535,7 @@ COPY public.users (id, username, password, first_name, last_name, email) FROM st
 -- Name: boats_id_seq; Type: SEQUENCE SET; Schema: public; Owner: levantsi
 --
 
-SELECT pg_catalog.setval('public.boats_id_seq', 13, true);
+SELECT pg_catalog.setval('public.boats_id_seq', 14, true);
 
 
 --
@@ -552,7 +556,7 @@ SELECT pg_catalog.setval('public.income_types_id_seq', 4, true);
 -- Name: owners_id_seq; Type: SEQUENCE SET; Schema: public; Owner: levantsi
 --
 
-SELECT pg_catalog.setval('public.owners_id_seq', 35, true);
+SELECT pg_catalog.setval('public.owners_id_seq', 36, true);
 
 
 --
@@ -566,7 +570,7 @@ SELECT pg_catalog.setval('public.time_rates_id_seq', 1, false);
 -- Name: transactions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: levantsi
 --
 
-SELECT pg_catalog.setval('public.transactions_id_seq', 14, true);
+SELECT pg_catalog.setval('public.transactions_id_seq', 15, true);
 
 
 --
@@ -580,7 +584,7 @@ SELECT pg_catalog.setval('public.units_id_seq', 1, false);
 -- Name: usage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: levantsi
 --
 
-SELECT pg_catalog.setval('public.usage_id_seq', 3, true);
+SELECT pg_catalog.setval('public.usage_id_seq', 4, true);
 
 
 --
