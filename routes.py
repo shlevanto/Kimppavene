@@ -7,7 +7,7 @@ from views.register import register_view, registeruser_view
 from views.logout import logout_view
 from views.boats import boats_view, addboat_view, joinboat_view, chooseboat_view
 from views.manageboat import manageboat_view
-from views.transactions import transactions_view, addusage_view, addmaintenance_view, addcost_view
+from views.transactions import transactions_view, addusage_view, addmaintenance_view, addcost_view, addincome_view
 
 
 # TEMPLATES
@@ -106,3 +106,9 @@ def addmaintenance():
 @login_required
 def addcost():
     return addcost_view()
+
+
+@app.route('/addincome', methods=['POST'])
+@login_required
+def addincome():
+    return addincome_view()

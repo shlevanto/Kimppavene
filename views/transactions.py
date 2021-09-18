@@ -158,6 +158,33 @@ def addcost_view():
     
     db.session.commit() 
 
-    flash('Tulo lisätty.')
+    flash('Kulu lisätty.')
     return redirect('/transactions')
+
+def addincome_view():
+    # usage_id for income = 4
+    amount = request.form['amount']
+    income_type = request.form['income_type']
+    description = request.form['description']
+
+    if float(amount) <= 0:
+        flash('Tulon on oltava suurempi kuin 0.')
+        return redirect('/transactions')
+    
+
+    start_datetime = parse_html_datetime(request.form['start_date'])
+    end_datetime = start_datetime
+    
+    sql = '''INSERT INTO transactions (user_id, boat_id, created, usage_id, amount, start_date, end_date, description, income_type_id) 
+                    VALUES (:user_id, :boat_id, NOW(), 4, :amount, :start_date, :end_date, :description, :income_type)  '''    
+    
+    db.session.execute(sql, {
+            'user_id': session['user']['id'], 'boat_id': session['boat']['id'], 
+            'amount':amount, 'start_date': start_datetime, 'end_date': end_datetime,
+            'description': description, 'income_type': income_type
+        })
+    
+    db.session.commit() 
+    flash('Tulo lisätty.')
+    return redirect('transactions')
 
