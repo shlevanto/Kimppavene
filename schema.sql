@@ -523,6 +523,7 @@ COPY public.users (id, username, password, first_name, last_name, email) FROM st
 2	bob	pbkdf2:sha256:260000$XpLaRKoZiu2m9Cmf$eedc7f133104440629d6f1deaea2ae84de3fffc57c3702f0463a3d81f3ba8ac4	Robert	Paulson	bigbob@paperstreet.co
 11	muumipappa	pbkdf2:sha256:260000$ZWihMDTxeEo284ke$78dee4912c63237bf1cfa84d1e8e95b8a405a5ce226a3e57304f47790a17f5ba	Muumi	Pappa	muumi@huumi.fi
 13	bib	pbkdf2:sha256:260000$EHrSa7dLdxLbJCpV$b1468d47e44f2b74987126c9867dafd7247460227b521bbc5a145b150ab60181	Bill	Bibbit	bi@bi.bi
+14	Paavo	pbkdf2:sha256:260000$2XFRPgTJtP4qBOyO$b8402feee8cd238924096f1cbe2e859b93242c407c261a2c09d35c127b7f41f1	Paavo	Pesusieni	a@s.d
 \.
 
 
@@ -586,7 +587,7 @@ SELECT pg_catalog.setval('public.usage_id_seq', 3, true);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: levantsi
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 13, true);
+SELECT pg_catalog.setval('public.users_id_seq', 14, true);
 
 
 --
