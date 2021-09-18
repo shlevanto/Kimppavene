@@ -33,7 +33,7 @@ def transactions_view():
     db.session.commit()
     income_types = result.fetchall()
     
-    return render_template('transactions.html', owners=owners, income_types=income_types)
+    return render_template('transactions.html', owners=owners, income_types=income_types, cost_types=cost_types)
 
 
 def addusage_view():
