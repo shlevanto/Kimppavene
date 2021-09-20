@@ -19,6 +19,8 @@ Voit liittyä osakkaaksi Muumipapan ja Fredriksonin Merenhuiske -veneeseen avain
 - Käyttäjä voi liittyä osakkaaksi olemassaolevaan veneeseen syöttämällä toiselta osakkaalta saamansa veneen avainkoodin järjestelmään.
 - Käyttäjä voi tehdä tapahtumakirjauksia veneelle. Kirjattavat
 tapahtumat ovat käyttö, talkootyö ja kustannukset.
+- Käyttöoikeuskirjanpito. Veneelle on käyttäjäkohtainen, vuosittainen oletuskäyttöoikeus 12 päivää.
+- Tehdyt talkootyöt kasvattavat käyttöoikeutta ja käyttö vähentää.
 
 ## Keskeneräiset toiminnallisuudet
 - Veneelle voi määritellä yhden tai useampia pääkäyttäjiä, jotka voivat muokata veneen tietoja. Veneen luonut käyttäjä määrittyy aina luomansa veneen pääkäyttäjäksi.
@@ -27,10 +29,9 @@ tapahtumat ovat käyttö, talkootyö ja kustannukset.
 ## Toteuttamista odottavat toiminnallisuudet
 - Käyttäjä voi tallentaa veneen tietoihin tiedostoja kuten käyttöohjeita, kuvia ja osakkaiden keskinäisiä sopimuksia.
 - Järjestelmässä on raporttinäkymiä, joista veneen osakas voi seurata omaa ja muiden saman veneen osakkaiden käyttöä. Veneen käyttömäärä, tehtyjen talkootuntien määrä ja osakas- / venekohtaiset kulut ja investoinnit.
+- Käyttöoikeuksille voi määritellä kertoimet eri viikoille. Lomakaudella käyttö syö enemmän käyttöoikeutta.
 
 ## Optiota lisäominaisuuksista
-- Käyttöoikeuskirjanpito. Veneelle voi määritellä käyttäjäkohtaisen, vuosittaisen oletuskäyttöoikeuden. Talkoopäivät kasvattavat käyttöoikeutta ja käyttö vähentää.
-- Käyttöoikeuksille voi määritellä kertoimet eri viikoille. Lomakaudella käyttö syö enemmän käyttöoikeutta.
 - Käyttäjä voi tehdä veneelle vuotuisen budjetin, jonka toteutumista voidaan seurata raporttinäkymässä.
 - Varauskalenteri, jossa osakkaat voivat varata veneen käyttövuoroja.
 - Varauskalenterin tapahtuman voi merkitä toteutuneeksi, jolloin se muuttuu tapahtumakirjaukseksi
