@@ -11,7 +11,7 @@
 
 var ctx = document.getElementById('myChart');
 var myChart = new Chart(ctx, {
-    type: 'line',
+    type: 'bar',
     data: {
         labels: [{% for item in labels %} '{{ item }}', {% endfor %}],
         datasets: [{
@@ -39,8 +39,12 @@ var myChart = new Chart(ctx, {
     options: {
         scales: {
             y: {
-                beginAtZero: true
-            }
+                beginAtZero: true,
+                suggestedMax: 1000
+            },
+        legend: {
+            display: false,
+        }
         }
     }
 });
