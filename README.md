@@ -3,7 +3,7 @@ Tämä on HY Tietokantasovellus syksy 2021 kurssityö. Kurssin tavoitteena on ra
 ## Kimppavene -sovellus
 Kimppavene on sovellus yhteisomistuksessa olevan veneen käyttövuorojen, talkootöiden ja kulujen seurantaan ja hallintaan.
 
-Sovellusta voi testata [Herokussa](https://kimppavene.herokuapp.com]).
+Sovellusta voi testata [Herokussa](https://kimppavene.herokuapp.com).
 
 Voit luoda oman käyttäjätilin tai käyttää valmiiksi luotuja tilejä:
 | käyttäjätunnus | salasana |
