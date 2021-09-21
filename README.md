@@ -11,7 +11,7 @@ Voit luoda oman käyttäjätilin tai käyttää valmiiksi luotuja tilejä:
 | muumipappa | merimeri |
 | fredrikson | havethavet |
 
-Voit liittyä osakkaaksi Muumipapan ja Fredriksonin Merenhuiske -veneeseen avainoodilla 8623af.
+Voit liittyä osakkaaksi Muumipapan ja Fredriksonin Merenhuiske -veneeseen avainkoodilla ```8623af```.
 
 ## Toteutet toiminnallisuudet
 - Palveluun voi luoda käyttäjätilin ja käyttäjä voi kirjautua sisään.
