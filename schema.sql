@@ -165,6 +165,83 @@ ALTER SEQUENCE public.owners_id_seq OWNED BY public.owners.id;
 
 
 --
+-- Name: transactions; Type: TABLE; Schema: public; Owner: levantsi
+--
+
+CREATE TABLE public.transactions (
+    id integer NOT NULL,
+    created timestamp without time zone,
+    usage_id integer,
+    amount numeric,
+    user_id integer,
+    boat_id integer,
+    unit integer,
+    start_date timestamp without time zone NOT NULL,
+    end_date timestamp without time zone NOT NULL,
+    race boolean,
+    description text,
+    cost_type_id integer,
+    income_type_id integer
+);
+
+
+ALTER TABLE public.transactions OWNER TO levantsi;
+
+--
+-- Name: usage; Type: TABLE; Schema: public; Owner: levantsi
+--
+
+CREATE TABLE public.usage (
+    id integer NOT NULL,
+    usage_type text
+);
+
+
+ALTER TABLE public.usage OWNER TO levantsi;
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: levantsi
+--
+
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    username text,
+    password text,
+    first_name text,
+    last_name text,
+    email text
+);
+
+
+ALTER TABLE public.users OWNER TO levantsi;
+
+--
+-- Name: report_base; Type: VIEW; Schema: public; Owner: levantsi
+--
+
+CREATE VIEW public.report_base AS
+ SELECT t.created,
+    usage.usage_type,
+    t.usage_id,
+    t.amount,
+    t.boat_id,
+    t.start_date,
+    t.end_date,
+    t.race,
+    t.description,
+    t.cost_type_id,
+    t.income_type_id,
+    users.first_name,
+    users.last_name
+   FROM (((public.transactions t
+     JOIN public.users ON ((t.user_id = users.id)))
+     JOIN public.usage ON ((t.usage_id = usage.id)))
+     JOIN public.boats ON ((t.boat_id = boats.id)));
+
+
+ALTER TABLE public.report_base OWNER TO levantsi;
+
+--
 -- Name: time_rates; Type: TABLE; Schema: public; Owner: levantsi
 --
 
@@ -172,7 +249,8 @@ CREATE TABLE public.time_rates (
     id integer NOT NULL,
     start_week numeric,
     end_week numeric,
-    ratio numeric
+    ratio numeric,
+    boat_id integer
 );
 
 
@@ -199,29 +277,6 @@ ALTER TABLE public.time_rates_id_seq OWNER TO levantsi;
 
 ALTER SEQUENCE public.time_rates_id_seq OWNED BY public.time_rates.id;
 
-
---
--- Name: transactions; Type: TABLE; Schema: public; Owner: levantsi
---
-
-CREATE TABLE public.transactions (
-    id integer NOT NULL,
-    created timestamp without time zone,
-    usage_id integer,
-    amount numeric,
-    user_id integer,
-    boat_id integer,
-    unit integer,
-    start_date timestamp without time zone NOT NULL,
-    end_date timestamp without time zone NOT NULL,
-    race boolean,
-    description text,
-    cost_type_id integer,
-    income_type_id integer
-);
-
-
-ALTER TABLE public.transactions OWNER TO levantsi;
 
 --
 -- Name: transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: levantsi
@@ -280,18 +335,6 @@ ALTER SEQUENCE public.units_id_seq OWNED BY public.units.id;
 
 
 --
--- Name: usage; Type: TABLE; Schema: public; Owner: levantsi
---
-
-CREATE TABLE public.usage (
-    id integer NOT NULL,
-    usage_type text
-);
-
-
-ALTER TABLE public.usage OWNER TO levantsi;
-
---
 -- Name: usage_id_seq; Type: SEQUENCE; Schema: public; Owner: levantsi
 --
 
@@ -312,22 +355,6 @@ ALTER TABLE public.usage_id_seq OWNER TO levantsi;
 
 ALTER SEQUENCE public.usage_id_seq OWNED BY public.usage.id;
 
-
---
--- Name: users; Type: TABLE; Schema: public; Owner: levantsi
---
-
-CREATE TABLE public.users (
-    id integer NOT NULL,
-    username text,
-    password text,
-    first_name text,
-    last_name text,
-    email text
-);
-
-
-ALTER TABLE public.users OWNER TO levantsi;
 
 --
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: levantsi
@@ -438,7 +465,6 @@ COPY public.cost_types (id, type) FROM stdin;
 4	Laituripaikka ja telakointi
 5	Talkoot ja juhlat
 6	Kilpailu
-7	Myynti
 \.
 
 
@@ -459,7 +485,6 @@ COPY public.income_types (id, type) FROM stdin;
 --
 
 COPY public.owners (id, user_id, boat_id, boat_admin, usage_right, usage_hours) FROM stdin;
-31	2	12	t	\N	288
 32	2	\N	\N	\N	288
 33	2	\N	\N	\N	288
 34	2	13	t	\N	282.0
@@ -467,6 +492,8 @@ COPY public.owners (id, user_id, boat_id, boat_admin, usage_right, usage_hours) 
 30	11	10	\N	\N	287.0
 28	2	11	t	\N	303
 36	2	14	t	\N	288
+37	14	10	\N	\N	288
+31	2	12	t	\N	286.0
 \.
 
 
@@ -474,7 +501,7 @@ COPY public.owners (id, user_id, boat_id, boat_admin, usage_right, usage_hours) 
 -- Data for Name: time_rates; Type: TABLE DATA; Schema: public; Owner: levantsi
 --
 
-COPY public.time_rates (id, start_week, end_week, ratio) FROM stdin;
+COPY public.time_rates (id, start_week, end_week, ratio, boat_id) FROM stdin;
 \.
 
 
@@ -496,6 +523,9 @@ COPY public.transactions (id, created, usage_id, amount, user_id, boat_id, unit,
 12	2021-09-17 18:01:43.454921	2	1	2	11	\N	2021-09-17 18:00:00	2021-09-17 19:00:00	\N	joi	\N	\N
 14	2021-09-17 18:49:25.300989	3	133.33	2	11	\N	2021-09-17 18:46:00	2021-09-17 18:46:00	\N	heijaa	1	\N
 15	2021-09-18 12:02:52.253902	4	100	2	14	\N	2021-09-18 12:02:00	2021-09-18 12:02:00	\N	faaalaa	\N	1
+16	2021-09-20 21:44:14.061025	1	2	2	12	\N	2021-09-20 21:44:00	2021-09-20 23:44:00	f	\N	\N	\N
+17	2021-09-20 22:03:55.12284	3	200	2	12	\N	2021-09-20 22:03:00	2021-09-20 22:03:00	\N	jotain	1	\N
+18	2021-09-20 22:04:14.504066	3	500	2	12	\N	2021-09-20 22:04:00	2021-09-20 22:04:00	\N	bileet	5	\N
 \.
 
 
@@ -556,7 +586,7 @@ SELECT pg_catalog.setval('public.income_types_id_seq', 4, true);
 -- Name: owners_id_seq; Type: SEQUENCE SET; Schema: public; Owner: levantsi
 --
 
-SELECT pg_catalog.setval('public.owners_id_seq', 36, true);
+SELECT pg_catalog.setval('public.owners_id_seq', 69, true);
 
 
 --
@@ -570,7 +600,7 @@ SELECT pg_catalog.setval('public.time_rates_id_seq', 1, false);
 -- Name: transactions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: levantsi
 --
 
-SELECT pg_catalog.setval('public.transactions_id_seq', 15, true);
+SELECT pg_catalog.setval('public.transactions_id_seq', 18, true);
 
 
 --
@@ -687,6 +717,14 @@ ALTER TABLE ONLY public.owners
 --
 
 ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT boat_id FOREIGN KEY (boat_id) REFERENCES public.boats(id);
+
+
+--
+-- Name: time_rates boat_id; Type: FK CONSTRAINT; Schema: public; Owner: levantsi
+--
+
+ALTER TABLE ONLY public.time_rates
     ADD CONSTRAINT boat_id FOREIGN KEY (boat_id) REFERENCES public.boats(id);
 
 
