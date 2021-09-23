@@ -1,9 +1,15 @@
 [MASTER]
-disable=C0114, C0115, C0116, C0111,
+disable=C0114, 
+	C0115, 
+	C0116, 
+	C0111,
+	E0401
+
+ignored-classes=scoped_session
 
 [MESSAGES CONTROL]
 
 disable=missing-module-docstring,
         missing-function-docstring,
         import-error,
-        cyclic-import,
+        cyclic-import
