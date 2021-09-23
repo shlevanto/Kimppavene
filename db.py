@@ -1,17 +1,17 @@
-from app import app
-from flask_sqlalchemy import SQLAlchemy
 from os import getenv
+from flask_sqlalchemy import SQLAlchemy
+from app import app
 
 # database configurations
-uri = getenv('DATABASE_URL')
+URI = getenv('DATABASE_URL')
 
 # SQLAlchemy 1.4.x does not support postgres:// uri scheme
 # it has to be changed to postgresql://
 
-if uri.startswith('postgres://'):
-    uri = uri.replace('postgres://', 'postgresql://', 1)
+if URI.startswith('postgres://'):
+    URI = URI.replace('postgres://', 'postgresql://', 1)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = uri 
+app.config['SQLALCHEMY_DATABASE_URI'] = URI
 db = SQLAlchemy(app)
 
 # get rid of error message when starting server

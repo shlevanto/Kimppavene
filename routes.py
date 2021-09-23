@@ -7,21 +7,11 @@ from views.register import register_view, registeruser_view
 from views.logout import logout_view
 from views.boats import boats_view, addboat_view, joinboat_view, chooseboat_view
 from views.manageboat import manageboat_view
-from views.transactions import transactions_view, addusage_view, addmaintenance_view, addcost_view, addincome_view
+from views.transactions import (
+    transactions_view, addusage_view,
+    addmaintenance_view, addcost_view, addincome_view
+    )
 
-
-# TEMPLATES
-
-# template for chart route
-@app.route('/chart')
-@login_required
-def chart():
-    labels = ['Tom', 'Dick', 'Harry']
-    label = 'No. of things'
-    data = [1, 3, 4]
-    return render_template('chart.html', labels=labels, label=label, data=data)
-
-# END TEMPLATES
 
 @app.route('/')
 @login_required
@@ -42,7 +32,7 @@ def loginuser():
 @app.route('/logout')
 def logout():
     return logout_view()
-    
+
 
 @app.route('/register')
 def register():
@@ -53,7 +43,7 @@ def register():
 def register_user():
     return registeruser_view()
 
-    
+
 @app.route('/boats')
 @login_required
 def boats():
@@ -64,7 +54,7 @@ def boats():
 @login_required
 def addboat():
     return addboat_view()
-    
+
 
 @app.route('/joinboat', methods=['POST'])
 @login_required
@@ -72,10 +62,10 @@ def joinboat():
     return joinboat_view()
 
 
-@app.route('/manageboat/<int:id>', methods=['GET'])
+@app.route('/manageboat/<int:boat_id>', methods=['GET'])
 @login_required
-def manageboat(id):
-    return manageboat_view(id)
+def manageboat(boat_id):
+    return manageboat_view(boat_id)
 
 
 @app.route('/chooseboat', methods=['POST'])
