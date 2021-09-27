@@ -2,7 +2,7 @@ from datetime import date
 from datetime import datetime
 import re
 from functools import wraps
-from flask import session, redirect
+from flask import session, redirect, abort
 
 
 def login_required(func):
@@ -30,4 +30,9 @@ def validate_year(input_year, min_year=1800, max_year=date.today().year):
 
 def parse_html_datetime(input_datetime):
     return datetime.strptime(input_datetime, '%Y-%m-%dT%H:%M')
+
+
+def csrf(csrf_token):
+    if session['csrf_token'] != csrf_token:
+        abort(403)  
     
