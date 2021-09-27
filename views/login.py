@@ -1,3 +1,4 @@
+from secrets import token_hex
 from werkzeug.security import check_password_hash
 from flask import render_template, request, session, redirect, flash
 from db import db
@@ -37,6 +38,7 @@ def loginuser_view():
                 'first_name': user.first_name,
                 'last_name': user.last_name
                 }
+            session['csrf_token'] = token_hex(16)
 
             sql = '''
                 SELECT name, id 
