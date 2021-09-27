@@ -1,5 +1,7 @@
+from flask import request
+
 from app import app
-from utils import login_required
+from utils import login_required, csrf
 
 from views.index import index_view
 from views.login import login_view, loginuser_view
@@ -53,24 +55,28 @@ def boats():
 @app.route('/addboat', methods=['POST'])
 @login_required
 def addboat():
+    csrf(request.form['csrf_token'])
     return addboat_view()
 
 
 @app.route('/joinboat', methods=['POST'])
 @login_required
 def joinboat():
+    csrf(request.form['csrf_token'])
     return joinboat_view()
 
 
 @app.route('/manageboat/<int:boat_id>', methods=['GET'])
 @login_required
 def manageboat(boat_id):
+    csrf(request.form['csrf_token'])
     return manageboat_view(boat_id)
 
 
 @app.route('/chooseboat', methods=['POST'])
 @login_required
 def chooseboat():
+    csrf(request.form['csrf_token'])
     return chooseboat_view()
 
 
@@ -83,22 +89,26 @@ def transactions():
 @app.route('/addusage', methods=['POST'])
 @login_required
 def addtransaction():
+    csrf(request.form['csrf_token'])
     return addusage_view()
 
 
 @app.route('/addmaintenance', methods=['POST'])
 @login_required
 def addmaintenance():
+    csrf(request.form['csrf_token'])
     return addmaintenance_view()
 
 
 @app.route('/addcost', methods=['POST'])
 @login_required
 def addcost():
+    csrf(request.form['csrf_token'])
     return addcost_view()
 
 
 @app.route('/addincome', methods=['POST'])
 @login_required
 def addincome():
+    csrf(request.form['csrf_token'])
     return addincome_view()

@@ -58,8 +58,6 @@ def boats_view():
     db.session.commit()
     user_boats = result.fetchall()
 
-    print(user_boats)
-
     return render_template(
         'boats.html',
         current_boat=current_boat,
@@ -82,6 +80,7 @@ def chooseboat_view():
 
 
 def addboat_view():
+    print(request.form)
     user_id = session['user']['id']
     key = token_hex(3)
     boat_name = request.form['boat_name']

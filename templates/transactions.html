@@ -18,6 +18,7 @@
       <div class="accordion-body">
         
         <form action="/addusage" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">  
           <div class="form-group col-6">
             <div class="form check form-switch">
             <input class="form-check-input" type="checkbox" id="race">
@@ -67,7 +68,7 @@
       <div class="accordion-body">
         
         <form action="/addmaintenance" method="POST">
-          
+          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">  
           <div class="form-group col-6">
             <label for="started_date">Alkoi</label>        
             <input type="datetime-local" class="form-control" name="start_date" id="start_date" required>
@@ -115,6 +116,7 @@
       <div class="accordion-body">
         
         <form action="/addcost" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">  
           <div class="form-group col-6">
             <label for="started_date">Päivämäärä</label>        
             <input type="datetime-local" class="form-control" name="start_date" id="start_date" required>
@@ -154,6 +156,7 @@
       <div class="accordion-body">
         
         <form action="/addincome" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">  
           <div class="form-group col-6">
             <label for="started_date">Päivämäärä</label>        
             <input type="datetime-local" class="form-control" name="start_date" id="start_date" required>

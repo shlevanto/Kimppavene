@@ -78,6 +78,7 @@
     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="addBoat" data-bs-parent="#accordionBoats">
       <div class="accordion-body">
         <form action="/addboat" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">  
           <div class="form-group col-6">
             <label for="boat_name">Veneen nimi</label>        
             <input type="text" class="form-control" name="boat_name" id="boat_name" required>
@@ -105,7 +106,7 @@
           </div>
           <div class="form-group col-6">
             <button type="submit" class="btn btn-primary">Lisää vene</button>
-          </div>  
+          </div>
         </form>     
       </div>
     </div>
@@ -120,6 +121,7 @@
     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="joinBoat" data-bs-parent="#accordionBoats">
       <div class="accordion-body">
         <form action="/joinboat" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">  
           <div class="form-group col-6">
             <label for="boat_name">Veneen avainkoodi</label>        
             <input type="text" class="form-control" name="boat_key" id="boat_key">
