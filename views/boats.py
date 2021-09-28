@@ -157,19 +157,34 @@ def joinboat_view():
     key = request.form['boat_key']
     user_id = session['user']['id']
 
-    if not validate_length(key, 30):
-        flash('Avaimella ei löydy venettä.')
+    if not validate_length(key, 6, 6):
+        flash('Avaimen pituus on 6 merkkiä.')
         return redirect('/boats')
 
-    # a default 12 days = 288 hours of usage is added when creating a boat
-    sql = '''
-        INSERT INTO owners (boat_id, user_id, usage_hours) 
-            VALUES (
-                (SELECT id FROM boats WHERE key=:key), :user_id, 288
-                )
-        '''
+    # abort if the user is already an owner of the boat
 
+    sql = '''
+        SELECT boats.name FROM owners JOIN boats ON owners.boat_id = boats.id WHERE boats.key=:key AND owners.user_id=:user_id
+    '''
+    result = db.session.execute(sql, {
+        'key': key,
+        'user_id': user_id
+    })
+
+    if result.fetchone():
+        boat = result.fetchone()
+        flash('Olet jo osakkaana tässä veneessä .')
+        return redirect('/boats')
+    
     try:
+    # a default 12 days = 288 hours of usage is added when creating a boat
+        sql = '''
+            INSERT INTO owners (boat_id, user_id, usage_hours) 
+                VALUES (
+                    (SELECT id FROM boats WHERE key=:key), :user_id, 288
+                    )
+            '''
+
         db.session.execute(sql, {'key': key, 'user_id': user_id})
         result = db.session.execute('SELECT id, name FROM boats WHERE key=:key', {'key': key})
         db.session.commit()
