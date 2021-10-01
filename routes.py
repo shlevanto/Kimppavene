@@ -15,7 +15,7 @@ from views.transactions import (
     )
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 @login_required
 def index():
     return index_view()
