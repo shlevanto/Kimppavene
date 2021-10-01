@@ -1,9 +1,9 @@
 import pandas as pd
-from flask import render_template, session, redirect, flash
+from flask import render_template, session, redirect, flash, request
 from db import db
 
 
-def index_view():
+def index_view(): 
     if session['boat']['id'] == '':
         flash(
             '''
@@ -12,25 +12,93 @@ def index_view():
             '''
             )
         return redirect('/boats')
+    
+    # get years with transactions for boat
+    sql = '''
+        SELECT DISTINCT(
+            EXTRACT(YEAR FROM start_date)::INT
+            ) AS year
+            FROM report_base 
+            WHERE boat_id=:session_boat
+            ORDER BY year DESC
+    '''
+    result = db.session.execute(sql, {'session_boat': session['boat']['id']})
+    years_tuples = result.fetchall()
+    db.session.commit()
+
+    # unfortunately the query returns the years as date tuples
+    # and I couldn't find a way to convert them to single integers
+    # with sql, so I parse them here in the backend instead
 
 
+    if years_tuples == []:
+        return render_template('index_empty.html')
+ 
+    else: 
+        years = []
+
+        for year in years_tuples:
+            if year[0]:
+                years.append(year[0])
+            else:
+                return render_template('index_empty')
+
+        if 'year' in request.args:
+            report_year = request.args['year']
+        else:
+            report_year = years[0]
+    
     # sums of costs per cost type
     sql = '''
         SELECT SUM(amount), cost_types.type
             FROM report_base 
-            JOIN cost_types ON report_base.cost_type_id = cost_types.id 
+            JOIN cost_types ON report_base.cost_type_id=cost_types.id 
+            WHERE boat_id=:session_boat AND EXTRACT(YEAR FROM start_date)=:report_year
             GROUP BY cost_types.id;
     '''
 
-    result = db.session.execute(sql, params={'session_boat': session['boat']['id']})
+    result = db.session.execute(sql, {'session_boat': session['boat']['id'], 'report_year': report_year})
     data = result.fetchall()
     db.session.commit()
 
     data_frame = pd.DataFrame(data)
-    data_frame.columns = data[0].keys()
 
-    labels = data_frame['type']
-    label = 'Menot'
-    data = data_frame['sum']
+    label_cost = 'Kulut per kategoria'
+    labels_cost = []
+    data_cost = []
+    
+    if len(data_frame.index) != 0:
+        data_frame.columns = data[0].keys()
+        labels_cost = data_frame['type']
+        data_cost = data_frame['sum']
 
-    return render_template('index.html', labels=labels, label=label, data=data)
+    # costs by user and cost type
+    sql = '''
+        SELECT CONCAT(first_name, ' ', last_name) AS name, SUM(amount) 
+            FROM report_base 
+            JOIN cost_types ON report_base.cost_type_id = cost_types.id 
+            WHERE boat_id = :session_boat AND usage_type='cost' AND EXTRACT(YEAR FROM start_date) = :report_year 
+            GROUP BY name;
+    '''
+    result = db.session.execute(sql, {'session_boat': session['boat']['id'], 'report_year': report_year})
+    data = result.fetchall()
+    db.session.commit()
+
+    data_frame_2 = pd.DataFrame(data)
+
+    label_cost_owner = 'Kulut per osakas'
+    labels_cost_owner = []
+    data_cost_owner = []
+
+    if len(data_frame_2.index) != 0:
+        data_frame_2.columns = data[0].keys()
+        labels_cost_owner = data_frame_2['name']
+        data_cost_owner = data_frame_2['sum']
+
+    
+    return render_template(
+        'index.html',
+        years=years,
+        labels_cost=labels_cost, label_cost=label_cost, data_cost=data_cost,
+        labels_cost_owner=labels_cost_owner, label_cost_owner=label_cost_owner, data_cost_owner=data_cost_owner
+        )
