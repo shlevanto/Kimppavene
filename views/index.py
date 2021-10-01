@@ -33,7 +33,7 @@ def index_view():
 
     if years_tuples == []:
         return render_template('index_empty.html')
- 
+
     else: 
         years = []
 
@@ -48,7 +48,58 @@ def index_view():
         else:
             report_year = years[0]
     
-    # sums of costs per cost type
+    # Chart 1 usage and maintenance work 
+    sql = '''
+        SELECT CONCAT(first_name, ' ', last_name) AS name, usage_type, SUM(amount) 
+            FROM report_base 
+            WHERE usage_type='sailing' OR usage_type='maintenance' 
+                AND boat_id=:session_boat
+                AND EXTRACT(YEAR FROM start_date)=:report_year
+            GROUP BY usage_type, name 
+            ORDER BY name;
+    '''
+    result = db.session.execute(sql, {
+        'session_boat': session['boat']['id'], 
+        'report_year': report_year})
+    data = result.fetchall()
+    db.session.commit()
+    
+    data_frame = pd.DataFrame(data)
+
+    label_usage = 'Käyttö ja talkoot'
+    labels_usage = []
+    data_usage = []
+
+    if len(data_frame.index) != 0:
+        data_frame.columns = data[0].keys()
+        labels_usage = data_frame['usage_type']
+        data_usage = data_frame['sum']
+
+    # Chart 2 usage right left
+    sql = '''
+        SELECT CONCAT(users.first_name, ' ', users.last_name) AS name, usage_hours 
+        FROM owners 
+        JOIN users ON owners.user_id=users.id 
+            WHERE boat_id=:session_boat;
+    '''
+    result = db.session.execute(sql, {
+        'session_boat': session['boat']['id'], 
+        'report_year': report_year})
+    data = result.fetchall()
+    db.session.commit()
+
+    data_frame = pd.DataFrame(data)
+
+    label_usage_right = 'Käyttöoikeutta jäljellä'
+    labels_usage_right = []
+    data_usage_right = []
+
+    if len(data_frame.index) != 0:
+        data_frame.columns = data[0].keys()
+        labels_usage_right = data_frame['name']
+        data_usage_right = data_frame['usage_hours']
+
+    # Chart 3 sums of costs per cost type
     sql = '''
         SELECT SUM(amount), cost_types.type
             FROM report_base 
@@ -72,7 +123,7 @@ def index_view():
         labels_cost = data_frame['type']
         data_cost = data_frame['sum']
 
-    # costs by user and cost type
+    # Chart 4 costs by user and cost type
     sql = '''
         SELECT CONCAT(first_name, ' ', last_name) AS name, SUM(amount) 
             FROM report_base 
@@ -99,6 +150,8 @@ def index_view():
     return render_template(
         'index.html',
         years=years,
+        labels_usage=labels_usage, label_usage=label_usage, data_usage=data_usage,
+        label_usage_right=label_usage_right, labels_usage_right=labels_usage_right, data_usage_right=data_usage_right,
         labels_cost=labels_cost, label_cost=label_cost, data_cost=data_cost,
         labels_cost_owner=labels_cost_owner, label_cost_owner=label_cost_owner, data_cost_owner=data_cost_owner
         )

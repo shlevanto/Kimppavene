@@ -6,15 +6,13 @@
 
 {% block content %}
 <ul>
-    <li>Kulut osakkaittain</li>
-    <li>Käyttömäärä</li>
-    <li>Talkoot</li>
+    Kuvaaja 1. ei vielä toimi, pitäisi olla käytöt ja talkoot per osakas.
 </ul>
-<div class="form-group col-6">
+<div class="form-group col-4">
     <form action="/" method="GET">
         <label for="years">Vuosi</label>        
         <select class="form-select" name="year" onchange="this.form.submit()" required>
-            <option selected>Valitse vuosi</option>
+            <option selected>Valitse vuosi <option>
             {% for y in years %}
                 <option value="{{ y }}">{{ y }}</option>
             {% endfor %}
@@ -28,51 +26,6 @@
       <canvas id="myChart1" width="50" height="50"></canvas>
         <script>
             var ctx = document.getElementById('myChart1');
-            var myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: [{% for item in labels_usage %} '{{ item }}', {% endfor %}],
-                    datasets: [{
-                        label: '{{ label_usage }}',
-                        data: [{% for value in data_usage %} {{ value }}, {% endfor %}],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(255, 159, 64, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            suggestedMax: 1000
-                        },
-                    legend: {
-                        display: false,
-                    }
-                    
-                    }
-                }
-            });
-        </script>
-    </div>
-    <div class="col-6">
-        <canvas id="myChart2" width="50" height="50"></canvas>
-        <script>
-            var ctx = document.getElementById('myChart2');
             var myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -96,8 +49,44 @@
                             'rgba(153, 102, 255, 1)',
                             'rgba(255, 159, 64, 1)'
                         ],
-                        borderWidth: 1,
-                        data: [{% for value in data_cost_owner %} {{ value }}, {% endfor %}],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '{{ label_cost_owner }}'
+                        },
+                    },
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: 1000
+                        },
+                    legend: {
+                        display: false,
+                    }
+                    
+                    }
+                }
+            });
+        </script>
+    </div>
+    <div class="col-6">
+        <canvas id="myChart2" width="50" height="50"></canvas>
+                <script>
+            var ctx = document.getElementById('myChart2');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [{% for item in labels_usage_right %} '{{ item }}', {% endfor %}],
+                    datasets: [{
+                        label: '{{ label_usage_right }}',
+                        data: [{% for value in data_usage_right %} {{ value }}, {% endfor %}],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',
@@ -118,6 +107,12 @@
                     }]
                 },
                 options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '{{ label_usage_right }}'
+                        }
+                    },
                     scales: {
                         x: {
                             stacked: true
@@ -128,8 +123,7 @@
                         },
                     legend: {
                         display: false,
-                    }
-                    
+                    },
                     }
                 }
             });
@@ -168,6 +162,12 @@
                     }]
                 },
                 options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '{{ label_cost }}'
+                        },
+                    },
                     scales: {
                         y: {
                             beginAtZero: true,
@@ -213,6 +213,12 @@
                     }]
                 },
                 options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '{{ label_cost_owner }}'
+                        },
+                    },
                     scales: {
                         x: {
                             stacked: true
