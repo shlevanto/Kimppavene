@@ -10,11 +10,11 @@
     <li>Käyttömäärä</li>
     <li>Talkoot</li>
 </ul>
-
 <div class="form-group col-6">
     <form action="/" method="GET">
         <label for="years">Vuosi</label>        
         <select class="form-select" name="year" onchange="this.form.submit()" required>
+            <option selected>Valitse vuosi</option>
             {% for y in years %}
                 <option value="{{ y }}">{{ y }}</option>
             {% endfor %}
@@ -31,10 +31,10 @@
             var myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: [{% for item in labels_cost %} '{{ item }}', {% endfor %}],
+                    labels: [{% for item in labels_usage %} '{{ item }}', {% endfor %}],
                     datasets: [{
-                        label: '{{ label_cost }}',
-                        data: [{% for value in data_cost %} {{ value }}, {% endfor %}],
+                        label: '{{ label_usage }}',
+                        data: [{% for value in data_usage %} {{ value }}, {% endfor %}],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',
@@ -79,6 +79,24 @@
                     labels: [{% for item in labels_cost_owner %} '{{ item }}', {% endfor %}],
                     datasets: [{
                         label: '{{ label_cost_owner }}',
+                        data: [{% for value in data_cost_owner %} {{ value }}, {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1,
                         data: [{% for value in data_cost_owner %} {{ value }}, {% endfor %}],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
