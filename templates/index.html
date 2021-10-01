@@ -5,49 +5,214 @@
 {% endblock %}
 
 {% block content %}
-  <h3>Etusivulle tulee kuvaajia, ensimmäisenä esimerkkinä veneen kulut eri kulukategorioittain</h3>
+<ul>
+    <li>Kulut osakkaittain</li>
+    <li>Käyttömäärä</li>
+    <li>Talkoot</li>
+</ul>
 
-  <canvas id="myChart" width="300" height="300"></canvas>
-<script>
+<div class="form-group col-6">
+    <form action="/" method="GET">
+        <label for="years">Vuosi</label>        
+        <select class="form-select" name="year" onchange="this.form.submit()" required>
+            {% for y in years %}
+                <option value="{{ y }}">{{ y }}</option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
+     
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <canvas id="myChart1" width="50" height="50"></canvas>
+        <script>
+            var ctx = document.getElementById('myChart1');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [{% for item in labels_cost %} '{{ item }}', {% endfor %}],
+                    datasets: [{
+                        label: '{{ label_cost }}',
+                        data: [{% for value in data_cost %} {{ value }}, {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: 1000
+                        },
+                    legend: {
+                        display: false,
+                    }
+                    
+                    }
+                }
+            });
+        </script>
+    </div>
+    <div class="col-6">
+        <canvas id="myChart2" width="50" height="50"></canvas>
+        <script>
+            var ctx = document.getElementById('myChart2');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [{% for item in labels_cost_owner %} '{{ item }}', {% endfor %}],
+                    datasets: [{
+                        label: '{{ label_cost_owner }}',
+                        data: [{% for value in data_cost_owner %} {{ value }}, {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: 1000
+                        },
+                    legend: {
+                        display: false,
+                    }
+                    
+                    }
+                }
+            });
+        </script>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <canvas id="myChart3" width="50" height="50"></canvas>
+        <script>
+            var ctx = document.getElementById('myChart3');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [{% for item in labels_cost %} '{{ item }}', {% endfor %}],
+                    datasets: [{
+                        label: '{{ label_cost }}',
+                        data: [{% for value in data_cost %} {{ value }}, {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: 1000
+                        },
+                    legend: {
+                        display: false,
+                    }
+                    
+                    }
+                }
+            });
+        </script>
+    </div>
+    <div class="col-6">
+        <canvas id="myChart4" width="50" height="50"></canvas>
+        <script>
+            var ctx = document.getElementById('myChart4');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [{% for item in labels_cost_owner %} '{{ item }}', {% endfor %}],
+                    datasets: [{
+                        label: '{{ label_cost_owner }}',
+                        data: [{% for value in data_cost_owner %} {{ value }}, {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: 1000
+                        },
+                    legend: {
+                        display: false,
+                    }
+                    
+                    }
+                }
+            });
+        </script>
+    </div>
+  </div>
+</div>
 
-var ctx = document.getElementById('myChart');
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: [{% for item in labels %} '{{ item }}', {% endfor %}],
-        datasets: [{
-            label: '{{ label }}',
-            data: [{% for value in data %} {{ value }}, {% endfor %}],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true,
-                suggestedMax: 1000
-            },
-        legend: {
-            display: false,
-        }
-        }
-    }
-});
-</script>
 {% endblock %}
