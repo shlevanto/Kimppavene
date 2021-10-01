@@ -75,12 +75,12 @@ def chooseboat_view():
         'id': boat_id,
         'name': boat_name
         }
-
+    print(session['boat'])
     return redirect('/boats')
 
 
 def addboat_view():
-    print(request.form)
+    
     user_id = session['user']['id']
     key = token_hex(3)
     boat_name = request.form['boat_name']
