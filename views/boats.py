@@ -102,8 +102,8 @@ def addboat_view():
 
     sql = '''
             WITH new_boat_id AS (
-                    INSERT INTO boats (name, type, year, description, key)
-                    VALUES (:boat_name, :boat_type, :boat_year, :boat_description, :key)
+                    INSERT INTO boats (name, type, year, description, key, created)
+                    VALUES (:boat_name, :boat_type, :boat_year, :boat_description, :key, NOW())
                     RETURNING id
                     )
                 INSERT INTO owners (user_id, boat_id, boat_admin, usage_hours)
