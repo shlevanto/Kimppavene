@@ -3,6 +3,7 @@ from datetime import date
 from flask import render_template, request, session, redirect, flash
 from db import db
 from utils import validate_length, validate_year
+import models.boat
 
 
 def boats_view():
@@ -19,17 +20,7 @@ def boats_view():
         current_boat = result.fetchone()
 
         # get owners and admin status for current / session boat
-        sql = '''SELECT first_name, last_name, boat_admin
-                    FROM (
-                        SELECT users.first_name, users.last_name, owners.boat_admin, owners.boat_id 
-                            FROM users 
-                        JOIN owners ON users.id = owners.user_id
-                        ) AS boat_owners 
-                        WHERE boat_owners.boat_id=:session_boat
-                '''
-        result = db.session.execute(sql, {'session_boat': session['boat']['id']})
-        db.session.commit()
-        owners = result.fetchall()
+        owners = models.boat.owners()
 
         # is the current user an admin of the current boat?
         sql = '''
@@ -48,15 +39,7 @@ def boats_view():
         is_admin = result.fetchone()
 
     # 2. get all boats of a user
-    sql = '''
-        SELECT boats.name, boats.id 
-            FROM boats 
-                JOIN owners ON boats.id=owners.boat_id 
-                WHERE owners.user_id=:session_user
-        '''
-    result = db.session.execute(sql, {'session_user': session['user']['id']})
-    db.session.commit()
-    user_boats = result.fetchall()
+    user_boats = models.boat.user_boats()
 
     return render_template(
         'boats.html',
@@ -79,8 +62,7 @@ def chooseboat_view():
     return redirect('/boats')
 
 
-def addboat_view():
-    
+def addboat_view(): 
     user_id = session['user']['id']
     key = token_hex(3)
     boat_name = request.form['boat_name']
@@ -113,9 +95,9 @@ def addboat_view():
                         ), TRUE, 288
                     )
             '''
-        # there is a small possibility that two keys are identical
-        # while this is a narrow possibility, the key value in database is constrained to unique,
-        # so we need to make sure the key is not a duplicate
+    # there is a small possibility that two keys are identical
+    # while this is a narrow possibility, the key value in database is constrained to unique,
+    # so we need to make sure the key is not a duplicate
 
     while True:
         result = db.session.execute('SELECT id FROM boats WHERE key=:key', {'key': key})
@@ -162,7 +144,6 @@ def joinboat_view():
         return redirect('/boats')
 
     # abort if the user is already an owner of the boat
-
     sql = '''
         SELECT boats.name FROM owners JOIN boats ON owners.boat_id = boats.id WHERE boats.key=:key AND owners.user_id=:user_id
     '''
@@ -175,7 +156,7 @@ def joinboat_view():
         boat = result.fetchone()
         flash('Olet jo osakkaana tässä veneessä .')
         return redirect('/boats')
-    
+
     try:
     # a default 12 days = 288 hours of usage is added when creating a boat
         sql = '''

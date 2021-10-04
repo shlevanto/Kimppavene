@@ -1,7 +1,7 @@
-from datetime import datetime
 from flask import render_template, request, redirect, session, flash
 from db import db
 from utils import parse_html_datetime, validate_length
+
 
 def transactions_view():
     if session['boat']['id'] == '':
@@ -89,8 +89,12 @@ def addusage_view():
                     )
         '''
         db.session.execute(sql, {
-            'user_id': user, 'boat_id': session['boat']['id'], 'duration_hours': duration_hours,
-            'start_date': start_datetime, 'end_date': end_datetime, 'race': race
+            'user_id': user, 
+            'boat_id': session['boat']['id'], 
+            'duration_hours': duration_hours,
+            'start_date': start_datetime, 
+            'end_date': end_datetime, 
+            'race': race
         })
 
         # modify the usage right of the users based on amount of users
@@ -187,6 +191,7 @@ def addcost_view():
     start_datetime = parse_html_datetime(request.form['start_date'])
     end_datetime = start_datetime
 
+    # usage id for cost = 3
     sql = '''
         INSERT INTO transactions (
             user_id, boat_id, created, usage_id, amount, start_date, end_date, description, cost_type_id

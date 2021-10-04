@@ -3,6 +3,7 @@ from werkzeug.security import check_password_hash
 from flask import render_template, request, session, redirect, flash
 from db import db
 from utils import validate_length
+import models.boat
 
 def login_view():
 # if a user is logged in, we redirect to index
@@ -46,14 +47,7 @@ def loginuser_view():
     session['csrf_token'] = token_hex(16)
 
     # get list of user's boats
-    sql = '''
-        SELECT boats.name, boats.id 
-            FROM boats 
-            JOIN owners ON boats.id=owners.boat_id 
-            WHERE owners.user_id=:user_id;
-        '''
-    result = db.session.execute(sql, {'user_id': user.id})
-    boats = result.fetchall()
+    boats = models.boat.user_boats()
 
     # if no boats, redirect to create / join boat
     if not boats:
