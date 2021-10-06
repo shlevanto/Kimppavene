@@ -12,7 +12,7 @@ def owners():
                 ) AS boat_owners 
             WHERE boat_owners.boat_id=:session_boat
     '''
-    
+
     result = db.session.execute(sql, {'session_boat': session['boat']['id']})
     db.session.commit()
 
@@ -31,4 +31,19 @@ def user_boats():
     db.session.commit()
 
     return result.fetchall()
-    
+
+
+def is_admin():
+    sql = '''
+        SELECT boat_admin 
+            FROM owners 
+            WHERE boat_id=:session_boat AND user_id=:session_user;
+    '''
+
+    result = db.session.execute(sql, {
+        'session_boat': session['boat']['id'],
+        'session_user': session['user']['id']
+    })
+    db.session.commit()
+
+    return result.fetchone()[0]

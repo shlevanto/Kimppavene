@@ -23,20 +23,8 @@ def boats_view():
         owners = models.boat.owners()
 
         # is the current user an admin of the current boat?
-        sql = '''
-            SELECT boat_admin 
-                FROM owners 
-                WHERE (user_id=:session_user AND boat_id=:session_boat)
-            '''
-        result = db.session.execute(
-            sql, {
-                'session_user': session['user']['id'],
-                'session_boat': session['boat']['id']
-                }
-            )
+        is_admin = models.boat.is_admin()
 
-        db.session.commit()
-        is_admin = result.fetchone()
 
     # 2. get all boats of a user
     user_boats = models.boat.user_boats()
@@ -118,7 +106,7 @@ def addboat_view():
             'user_id': user_id
             }
         )
-
+    
     db.session.commit()
 
     # set new boat as current boat
