@@ -47,3 +47,15 @@ def is_admin():
     db.session.commit()
 
     return result.fetchone()[0]
+
+
+def get_boat_info():
+    sql = '''
+        SELECT id, name, type, year, description 
+            FROM boats 
+            WHERE id=:session_boat'''
+
+    result = db.session.execute(sql, {'session_boat': session['boat']['id']})
+    db.session.commit()
+
+    return result.fetchone()
