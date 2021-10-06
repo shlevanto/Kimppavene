@@ -66,11 +66,10 @@ def joinboat():
     return joinboat_view()
 
 
-@app.route('/manageboat/<int:boat_id>', methods=['GET'])
+@app.route('/manageboat')
 @login_required
-def manageboat(boat_id):
-    csrf(request.form['csrf_token'])
-    return manageboat_view(boat_id)
+def manageboat():
+    return manageboat_view()
 
 
 @app.route('/chooseboat', methods=['POST'])
