@@ -29,8 +29,6 @@ def index_view():
     # unfortunately the query returns the years as date tuples
     # and I couldn't find a way to convert them to single integers
     # with sql, so I parse them here in the backend instead
-
-
     if years_tuples == []:
         return render_template('index_empty.html')
 
@@ -63,17 +61,19 @@ def index_view():
         'report_year': report_year})
     data = result.fetchall()
     db.session.commit()
-    
+
     data_frame = pd.DataFrame(data)
 
-    label_usage = 'Käyttö ja talkoot'
+    label_usage = 'Käyttö ja talkoot per osakas'
     labels_usage = []
-    data_usage = []
+    data_usage_sailing = []
+    data_usage_maintenance = []
 
     if len(data_frame.index) != 0:
         data_frame.columns = data[0].keys()
-        labels_usage = data_frame['usage_type']
-        data_usage = data_frame['sum']
+        labels_usage = pd.unique(data_frame['name'])
+        data_usage_sailing = data_frame[data_frame['usage_type']=='sailing']['sum']
+        data_usage_maintenance = data_frame[data_frame['usage_type']=='maintenance']['sum']
 
     # Chart 2 usage right left
     sql = '''
@@ -83,7 +83,7 @@ def index_view():
             WHERE boat_id=:session_boat;
     '''
     result = db.session.execute(sql, {
-        'session_boat': session['boat']['id'], 
+        'session_boat': session['boat']['id'],
         'report_year': report_year})
     data = result.fetchall()
     db.session.commit()
@@ -150,7 +150,7 @@ def index_view():
     return render_template(
         'index.html',
         years=years,
-        labels_usage=labels_usage, label_usage=label_usage, data_usage=data_usage,
+        labels_usage=labels_usage, label_usage=label_usage, data_usage_sailing=data_usage_sailing, data_usage_maintenance=data_usage_maintenance,
         label_usage_right=label_usage_right, labels_usage_right=labels_usage_right, data_usage_right=data_usage_right,
         labels_cost=labels_cost, label_cost=label_cost, data_cost=data_cost,
         labels_cost_owner=labels_cost_owner, label_cost_owner=label_cost_owner, data_cost_owner=data_cost_owner

@@ -5,63 +5,66 @@
 {% endblock %}
 
 {% block content %}
-<ul>
-    Kuvaaja 1. ei vielä toimi, pitäisi olla käytöt ja talkoot per osakas.
-</ul>
 <div class="form-group col-4">
     <form action="/" method="GET">
         <label for="years">Vuosi</label>        
         <select class="form-select" name="year" onchange="this.form.submit()" required>
-            <option selected>Valitse vuosi <option>
+            <option selected>Valitse vuosi </option>
             {% for y in years %}
                 <option value="{{ y }}">{{ y }}</option>
             {% endfor %}
         </select>
     </form>
 </div>
-     
+
 <div class="container">
   <div class="row">
     <div class="col-6">
       <canvas id="myChart1" width="50" height="50"></canvas>
         <script>
+            var fillCol = []
+            var borderCol = []
             var ctx = document.getElementById('myChart1');
             var myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: [{% for item in labels_cost_owner %} '{{ item }}', {% endfor %}],
-                    datasets: [{
-                        label: '{{ label_cost_owner }}',
-                        data: [{% for value in data_cost_owner %} {{ value }}, {% endfor %}],
+                    labels: [{% for item in labels_usage %} '{{ item }}', {% endfor %}],
+                    datasets: [{       
+                        label: 'Käyttö',
+                        data: [{% for item in data_usage_sailing%} '{{ item }}', {% endfor %}],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(255, 159, 64, 0.2)'
                         ],
                         borderColor: [
                             'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)'
                         ],
                         borderWidth: 1
-                    }]
+                    },
+{       
+                        label: 'Talkoo',
+                        data: [{% for item in data_usage_maintenance%} '{{ item }}', {% endfor %}],
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.2)',
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                        ],
+                        borderWidth: 1
+                    },
+
+                    
+                    ]
                 },
                 options: {
                     plugins: {
                         title: {
                             display: true,
-                            text: '{{ label_cost_owner }}'
+                            text: '{{ label_usage }}'
                         },
                     },
                     scales: {
                         x: {
-                            stacked: true
+                            stacked: false
                         },
                         y: {
                             beginAtZero: true,
@@ -74,6 +77,8 @@
                     }
                 }
             });
+
+
         </script>
     </div>
     <div class="col-6">
@@ -88,20 +93,10 @@
                         label: '{{ label_usage_right }}',
                         data: [{% for value in data_usage_right %} {{ value }}, {% endfor %}],
                         backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(255, 159, 64, 0.2)'
                         ],
                         borderColor: [
-                            'rgba(255, 99, 132, 1)',
                             'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)'
                         ],
                         borderWidth: 1
                     }]
