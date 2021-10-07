@@ -187,6 +187,9 @@ def addcost_view():
         flash('Kulun on oltava suurempi kuin 0.')
         return redirect('/transactions')
 
+    if not validate_length(description, 255):
+        flash('Kulun kuvaus on liian pitkä.')
+        return redirect('transactions/')
 
     start_datetime = parse_html_datetime(request.form['start_date'])
     end_datetime = start_datetime
@@ -229,6 +232,9 @@ def addincome_view():
         flash('Tulon on oltava suurempi kuin 0.')
         return redirect('/transactions')
 
+    if not validate_length(description, 255):
+        flash('Kulun kuvaus on liian pitkä.')
+        return redirect('transactions/')
 
     start_datetime = parse_html_datetime(request.form['start_date'])
     end_datetime = start_datetime
@@ -255,5 +261,6 @@ def addincome_view():
         )
 
     db.session.commit()
+    
     flash('Tulo lisätty.')
     return redirect('transactions')

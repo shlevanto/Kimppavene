@@ -68,6 +68,11 @@ def addboat_view():
         flash('Valmistusvuoden on oltava väliltä 1800 - {}.'.format(date.today().year))
         return redirect('/boats')
 
+    if not validate_length(boat_description, 300):
+        flash('Veneen kuvaus on liian pitkä.')
+        return redirect('/boats')
+
+
     # Inserts new boat, uses the new id to insert ownership
     # a default 12 days = 288 hours of usage is added when creating a boat
 
