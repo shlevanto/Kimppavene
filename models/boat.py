@@ -51,7 +51,7 @@ def is_admin():
 
 def get_boat_info():
     sql = '''
-        SELECT id, name, type, year, description 
+        SELECT id, name, type, year, description, key 
             FROM boats 
             WHERE id=:session_boat'''
 
