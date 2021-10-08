@@ -24,9 +24,9 @@ tapahtumat ovat käyttö, talkootyö ja kustannukset.
 - Veneellä on yksi tai useampia pääkäyttäjiä, jotka voivat muokata veneen tietoja.
 - Veneen luonut käyttäjä määrittyy aina luomansa veneen pääkäyttäjäksi.
 - Järjestelmässä on raporttinäkymiä, joista veneen osakas voi seurata omaa ja muiden saman veneen osakkaiden käyttöä. Veneen käyttömäärä, tehtyjen talkootuntien määrä ja osakas- / venekohtaiset kulut ja investoinnit.
+- Veneen pääkäyttäjä voi antaa muille veneen osakkaille pääkäyttäjän oikeudet.
 
 ## Keskeneräiset toiminnallisuudet
-- Veneen pääkäyttäjä voi antaa muille veneen osakkaille pääkäyttäjän oikeudet.
 - Käyttöoikeuksille voi määritellä kertoimet eri viikoille. Lomakaudella käyttö syö enemmän käyttöoikeutta.
 
 ## Toteuttamista odottavat toiminnallisuudet

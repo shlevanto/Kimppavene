@@ -5,19 +5,25 @@ from utils import validate_length, validate_year
 
 
 def manageboat_view():
+    print(session['boat']['name'])
     # check that user is this boats admin
     if not models.boat.is_admin():
-        return redirect('boats/')
+        flash(
+            'Sinulla ei ole oikeuksia veneen {} tietojen muokkaamiseen.'
+            .format(session['boat']['name'])
+            )
+        return redirect('/boats')
 
     # get boat info
     current_boat = models.boat.get_boat_info()
 
-    # get boat users
-    owners = models.boat.owners()
+    # get boat users excluding session user
+    # session user is used by default, include other owners of boat too
+    owners = models.boat.owners(exclude=True)
 
     # get boat usage rights
 
-    return render_template('manageboat.html', current_boat=current_boat)
+    return render_template('manageboat.html', current_boat=current_boat, owners=owners)
 
 
 def editboat_view():
@@ -26,7 +32,7 @@ def editboat_view():
     boat_type = request.form['boat_type']
     boat_year = request.form['boat_year']
     boat_description = request.form['boat_description']
-    
+
     # validate inputs
     if not (validate_length(boat_name, 50) and validate_length(boat_type, 50)):
         flash('Veneen nimi tai tyyppi on liian pitkä.')
@@ -39,7 +45,7 @@ def editboat_view():
     if not validate_length(boat_description, 300):
         flash('Veneen kuvaus on liian pitkä.')
         return redirect('/manageboat')
-    
+
     sql = '''
         UPDATE boats 
             SET name=:boat_name, type=:boat_type, year=:boat_year, description=:boat_description
@@ -55,6 +61,34 @@ def editboat_view():
     })
 
     db.session.commit()
-    
+
     flash('Veneen tiedot päivitetty.')
+    return redirect('/manageboat')
+
+
+def editboatadmins_view():
+    owners = models.boat.owners(exclude=True)
+    owner_ids = [owner[2] for owner in owners]
+    admin_from_form = [int(user) for user in request.form.getlist('user')]
+
+    # list of ids that should be allowed admin rights
+    allow_admin = set(owner_ids).intersection(set(admin_from_form))
+
+    for user in allow_admin:
+        sql = '''
+            UPDATE owners SET boat_admin=TRUE WHERE user_id=:user
+        '''
+        db.session.execute(sql, {'user': user})
+        db.session.commit()
+
+    # list of ids that should be revoked admin right
+    revoke_admin = set(owner_ids).difference(set(admin_from_form))
+
+    for user in revoke_admin:
+        sql = '''
+            UPDATE owners SET boat_admin=NULL WHERE user_id=:user
+        '''
+        db.session.execute(sql, {'user': user})
+        db.session.commit()
+
     return redirect('/manageboat')
