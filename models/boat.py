@@ -2,18 +2,35 @@ from flask import session
 from db import db
 
 
-def owners():
-    sql = '''
-        SELECT first_name, last_name, boat_admin
-            FROM (
-                SELECT users.first_name, users.last_name, owners.boat_admin, owners.boat_id 
-                    FROM users 
-                    JOIN owners ON users.id = owners.user_id
-                ) AS boat_owners 
-            WHERE boat_owners.boat_id=:session_boat
-    '''
+def owners(exclude=False):
+    print(exclude)
+    if exclude:
+        sql = '''
+        SELECT first_name, last_name, id, boat_admin
+                FROM (
+                    SELECT users.first_name, users.last_name, users.id, owners.boat_admin, owners.boat_id 
+                        FROM users 
+                        JOIN owners ON users.id = owners.user_id
+                    ) AS boat_owners 
+                WHERE boat_owners.boat_id=:session_boat 
+                    AND NOT (id=:session_user)
+        '''
 
-    result = db.session.execute(sql, {'session_boat': session['boat']['id']})
+    else:
+        sql = '''
+            SELECT first_name, last_name, id, boat_admin
+                FROM (
+                    SELECT users.first_name, users.last_name, users.id, owners.boat_admin, owners.boat_id 
+                        FROM users 
+                        JOIN owners ON users.id = owners.user_id
+                    ) AS boat_owners 
+                WHERE boat_owners.boat_id=:session_boat
+        '''
+
+    result = db.session.execute(sql, {
+        'session_user': session['user']['id'],
+        'session_boat': session['boat']['id']
+    })
     db.session.commit()
 
     return result.fetchall()
