@@ -5,13 +5,8 @@
 {% endblock %}
 
 {% block content %}
-  <ul>
-    <li>Here boat info in fields with a save button to save modified info</li>
-    <li>list of users that can be made admin, admin revoked or kicked out of boat</li>
-    <li>key for inviting new admins</li>
-    <li>retire boat?</li>
-  </ul>
-  <h4>Voit kutsua uusia käyttäjiä osakkaiksi veneeseen {{ current_boat.name}} avainkoodilla <strong>{{ current_boat.key }}</strong></h4>
+
+<h4>Voit kutsua uusia käyttäjiä osakkaiksi veneeseen {{ current_boat.name}} avainkoodilla <strong>{{ current_boat.key }}</strong></h4>
 <div class="accordion" id="accordionManageboat">
   <div class="accordion-item">
     <h2 class="accordion-header" id="headingOne">
