@@ -13,13 +13,9 @@ def boats_view():
         owners = None
         is_admin = None
     else:
-        # get info on current / session boat
-        #sql = '''SELECT id, name, type, year, description FROM boats WHERE id=:session_boat'''
-        #result = db.session.execute(sql, {'session_boat': session['boat']['id']})
-        #db.session.commit()
+ 
         current_boat = models.boat.get_boat_info()
-        print(current_boat)
-
+ 
         # get owners and admin status for current / session boat
         owners = models.boat.owners()
 

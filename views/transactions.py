@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, session, flash
 from db import db
 from utils import parse_html_datetime, validate_length
+import models.boat
 
 
 def transactions_view():
@@ -15,26 +16,7 @@ def transactions_view():
         return redirect('/boats')
 
     # session user is used by default, include other owners of boat too
-    sql = '''
-        SELECT first_name, last_name, id 
-            FROM (
-                SELECT users.first_name, users.last_name, users.id, owners.boat_admin, owners.boat_id 
-                   FROM users 
-                   JOIN owners ON users.id = owners.user_id
-                ) AS boat_owners 
-                WHERE boat_owners.boat_id=:session_boat 
-                    AND NOT (id=:session_user);
-        '''
-
-    result = db.session.execute(
-        sql, {
-            'session_boat': session['boat']['id'],
-            'session_user': session['user']['id']
-            }
-        )
-
-    db.session.commit()
-    owners = result.fetchall()
+    owners = models.boat.owners(exclude=True)
 
     # get cost types for forms
     sql = '''SELECT id, type FROM cost_types'''
