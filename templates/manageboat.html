@@ -68,38 +68,23 @@
     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionManageboat">
       <div class="accordion-body">
         
-        <form action="/addmaintenance" method="POST">
+        <form action="/editboatadmins" method="POST">
           <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">  
-          <div class="form-group col-6">
-            <label for="started_date">Alkoi</label>        
-            <input type="datetime-local" class="form-control" name="start_date" id="start_date" required>
-          </div>
-
-          <div class="form-group col-6">
-            <label for="ended_date">Päättyi</label>        
-            <input type="datetime-local" class="form-control" name="end_date" id="end_date">
-          </div>
           <div class="form-group col-6">
             <label for="users">Osakkaat</label>        
             <div class="form check form-switch">
-              <input class="form-check-input" type="checkbox" name="user" id="user" value="{{ session.user.id }}" checked>
+              <input class="form-check-input" type="checkbox" name="user" id="user" value="{{ session.user.id }}" checked disabled>
               <label class="form-check-label" for="user">{{ session.user.first_name }} {{ session.user.last_name }}</label>
             </div>
-          
             {% for owner in owners %}
             <div class="form check form-switch">
-              <input class="form-check-input" type="checkbox" name="user" id="user" value="{{ owner.id }}">
+              <input class="form-check-input" type="checkbox" name="user" id="user" value="{{ owner.id }}" {% if owner.boat_admin == True %} checked {% endif %}>
               <label class="form-check-label" for="user">{{ owner.first_name }} {{ owner.last_name}}</label>
             </div>
             {% endfor %} 
           </div>
-
-          <div>
-          <label for="description">Kuvaus</label>        
-            <input type="text" class="form-control" name="description" id="description" required>
-          </div>
           <div class="form-group col-6">
-            <button type="submit" class="btn btn-primary">Kirjaa</button>
+            <button type="submit" class="btn btn-primary">Tallenna</button>
           </div>              
         </form>
       
