@@ -1,6 +1,7 @@
 from flask import render_template, redirect, flash, session, request
 from db import db
 import models.boat
+import models.time_rates
 from utils import validate_length, validate_year
 
 
@@ -22,8 +23,9 @@ def manageboat_view():
     owners = models.boat.owners(exclude=True)
 
     # get boat usage rights
+    time_rates = models.time_rates.get_time_rates()
 
-    return render_template('manageboat.html', current_boat=current_boat, owners=owners)
+    return render_template('manageboat.html', current_boat=current_boat, owners=owners, time_rates=time_rates)
 
 
 def editboat_view():
@@ -92,3 +94,22 @@ def editboatadmins_view():
         db.session.commit()
 
     return redirect('/manageboat')
+
+def edittimerates_view():
+    # validate input
+    for ratio in request.form.getlist('ratio'):
+        if float(ratio) <= 0:
+            flash('Kertoimen on oltava suurempi kuin nolla.')
+            return redirect('/manageboat')
+    
+    time_rates = [float(ratio) for ratio in request.form.getlist('ratio')]
+    weeks = list(range(18,40))
+
+    updated_time_rates = dict(zip(weeks, time_rates))
+
+    # update time rates
+    models.time_rates.set_time_rates(time_rates=updated_time_rates, initialize=False)
+    flash('Käyttöaikakertoimet päivitetty.')
+    
+    return redirect('/manageboat')
+
