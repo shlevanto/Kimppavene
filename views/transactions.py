@@ -46,6 +46,9 @@ def addusage_view():
     start_datetime = parse_html_datetime(request.form['start_date'])
     end_datetime = parse_html_datetime(request.form['end_date'])
 
+    # extract week number from start_datetime
+    week_no = start_datetime.isocalendar()[1]
+
     if start_datetime > end_datetime:
         flash('Aloitusajankohta ei voi olla päättymisajankohdan jälkeen.')
         return redirect('/transactions')
@@ -60,7 +63,6 @@ def addusage_view():
     duration_hours = (duration.seconds // 3600) + (duration.days * 24)
 
     for user in users:
-
         # add row to database with usage, duration / no of users and user
         sql = '''
             INSERT INTO transactions (
@@ -71,26 +73,29 @@ def addusage_view():
                     )
         '''
         db.session.execute(sql, {
-            'user_id': user, 
-            'boat_id': session['boat']['id'], 
+            'user_id': user,
+            'boat_id': session['boat']['id'],
             'duration_hours': duration_hours,
-            'start_date': start_datetime, 
-            'end_date': end_datetime, 
+            'start_date': start_datetime,
+            'end_date': end_datetime,
             'race': race
         })
 
-        # modify the usage right of the users based on amount of users
+        # modify the usage right of the users
+        # based on amount of users and the time rate for the start date
         sql = '''
             UPDATE owners 
-                SET usage_hours = usage_hours - :usage_hours_per_user 
-                    WHERE user_id = :user_id AND boat_id = :boat_id;
+                SET usage_hours = usage_hours - (:usage_hours_per_user * 
+                    (SELECT ratio FROM time_rates WHERE boat_id=:boat_id AND week=:week_no))
+                WHERE user_id = :user_id AND boat_id = :boat_id;
             '''
 
         db.session.execute(
             sql, {
                 'usage_hours_per_user': duration_hours / len(users),
                 'user_id': user,
-                'boat_id': session['boat']['id']
+                'boat_id': session['boat']['id'],
+                'week_no': week_no
                 }
             )
 
