@@ -7,16 +7,17 @@
 {% block content %}
 
 <h4>Voit kutsua uusia käyttäjiä osakkaiksi veneeseen {{ current_boat.name}} avainkoodilla <strong>{{ current_boat.key }}</strong></h4>
-<div class="accordion" id="accordionManageboat">
+
+<div class="accordion" id="accordionManageboat">  
+  
   <div class="accordion-item">
-    <h2 class="accordion-header" id="headingOne">
+    <h2 class="accordion-header" id="editBoat">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
         Muokkaa veneen tietoja
       </button>
     </h2>
-    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionManageboat">
+    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="editBoat" data-bs-parent="#accordionManageboat">
       <div class="accordion-body">
-        
         <form action="/editboat" method="POST">
           <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">  
           <div class="form-group col-6">
@@ -48,21 +49,18 @@
             <button type="submit" class="btn btn-primary">Tallenna muutokset</button>
           </div>
         </form>
-
-        </div>
       </div>
     </div>
   </div>
 
   <div class="accordion-item">
-    <h2 class="accordion-header" id="headingTwo">
+    <h2 class="accordion-header" id="editBoatAdmins">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-        Muokkaa veneen pääkäyttäjäoikeuksia
+        Muokkaa pääkäyttäjäoikeuksia
       </button>
     </h2>
-    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionManageboat">
+    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="editBoatAdmins" data-bs-parent="#accordionManageboat">
       <div class="accordion-body">
-        
         <form action="/editboatadmins" method="POST">
           <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">  
           <div class="form-group col-6">
@@ -82,54 +80,32 @@
             <button type="submit" class="btn btn-primary">Tallenna</button>
           </div>              
         </form>
-      
       </div>
     </div>
   </div>
 
   <div class="accordion-item">
-    <h2 class="accordion-header" id="headingThree">
+    <h2 class="accordion-header" id="editTimeRates">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-        Muokkaa käyttöaikakertoimia
+        Muokkaa käyttöajan kertoimia
       </button>
     </h2>
-    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionManageboat">
+    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="editTimeRates" data-bs-parent="#accordionManageboat">
       <div class="accordion-body">
-        
-        <form action="/addcost" method="POST">
+        <form action="/edittimerates" method="POST">
           <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">  
-          <div class="form-group col-6">
-            <label for="started_date">Päivämäärä</label>        
-            <input type="datetime-local" class="form-control" name="start_date" id="start_date" required>
-          </div>
-          <div class="form-group col-6">
-            <label for="boat_year">Summa</label>        
-            <input type="number" step="0.01" class="form-control" name="amount" id="amount" required>
-          </div>
-          <div class="form-group col-6">
-            <label for="cost_type">Kategoria</label>        
-            <select class="form-select" name="cost_type" required>
-              {% for type in cost_types%}
-                <option value="{{ type.id }}">{{type.type }}</option>
-              {% endfor%}
-            </select>
-          </div>
-          <div>
-          <label for="description">Kuvaus</label>        
-            <input type="text" class="form-control" name="description" id="description" required>
-          </div>
-          <div class="form-group col-6">
-            <button type="submit" class="btn btn-primary">Kirjaa</button>
-          </div>    
-        </form>
-      
+          {% for rate in time_rates %}
+            <div class="col-xs-2">
+              <label for="ratio">Viikko {{ rate.week }}</label>   
+              <input type="text" class="form-control" name="ratio" id="ratio" value="{{ rate.ratio }}" maxlength="4">
+            </div>
+            </br>
+          {% endfor %}
+          <button type="submit" class="btn btn-primary">Tallenna</button>
+        <form>
       </div>
     </div>
   </div>
-
-    
-
-</div>
 
   
 {% endblock %}
