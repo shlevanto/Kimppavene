@@ -65,7 +65,7 @@ def addboat_view():
         flash('Valmistusvuoden on oltava väliltä 1800 - {}.'.format(date.today().year))
         return redirect('/boats')
 
-    if not validate_length(boat_description, 300):
+    if not validate_length(boat_description, 300, 0):
         flash('Veneen kuvaus on liian pitkä.')
         return redirect('/boats')
 
