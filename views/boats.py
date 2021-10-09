@@ -4,6 +4,7 @@ from flask import render_template, request, session, redirect, flash
 from db import db
 from utils import validate_length, validate_year
 import models.boat
+import models.time_rates
 
 
 def boats_view():
@@ -13,9 +14,9 @@ def boats_view():
         owners = None
         is_admin = None
     else:
- 
+
         current_boat = models.boat.get_boat_info()
- 
+
         # get owners and admin status for current / session boat
         owners = models.boat.owners()
 
@@ -47,7 +48,7 @@ def chooseboat_view():
     return redirect('/boats')
 
 
-def addboat_view(): 
+def addboat_view():
     user_id = session['user']['id']
     key = token_hex(3)
     boat_name = request.form['boat_name']
@@ -108,10 +109,10 @@ def addboat_view():
             'user_id': user_id
             }
         )
-    
+
     db.session.commit()
 
-    # set new boat as current boat
+    # set new boat as session boat
     result = db.session.execute('SELECT name, id FROM boats WHERE key=:key', {'key': key})
     db.session.commit()
 
@@ -121,6 +122,9 @@ def addboat_view():
         'id': boat.id,
         'name': boat.name
         }
+
+    # initialize time rates
+    models.time_rates.set_time_rates(initialize=True)
 
     return redirect('/boats')
 
