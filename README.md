@@ -11,7 +11,7 @@ Voit luoda oman käyttäjätilin tai käyttää valmiiksi luotuja tilejä:
 | muumipappa | merimeri |
 | fredrikson | havethavet |
 
-Voit liittyä osakkaaksi Muumipapan ja Fredriksonin Merenhuiske -veneeseen avainkoodilla ```8623af```.
+Voit liittyä osakkaaksi Muumipapan ja Fredriksonin Merenhuiske -veneeseen avainkoodilla ```2123f1```.
 
 ## Toteutet toiminnallisuudet
 - Palveluun voi luoda käyttäjätilin ja käyttäjä voi kirjautua sisään.
@@ -25,9 +25,10 @@ tapahtumat ovat käyttö, talkootyö ja kustannukset.
 - Veneen luonut käyttäjä määrittyy aina luomansa veneen pääkäyttäjäksi.
 - Järjestelmässä on raporttinäkymiä, joista veneen osakas voi seurata omaa ja muiden saman veneen osakkaiden käyttöä. Veneen käyttömäärä, tehtyjen talkootuntien määrä ja osakas- / venekohtaiset kulut ja investoinnit.
 - Veneen pääkäyttäjä voi antaa muille veneen osakkaille pääkäyttäjän oikeudet.
+- Kun luodaan uusi vene, sille määrittyy oletuskertoimet käyttöoikeuksien kertoimille. Kertoimet on määritelty viikkojen numeroiden perusteella. Ideana on, että lomakaudella käyttö syö enemmän käyttöoikeutta.
+- Käyttöoikeuksien kertoimia voi määritellä pääkäyttäjänäkymässä.
 
 ## Keskeneräiset toiminnallisuudet
-- Käyttöoikeuksille voi määritellä kertoimet eri viikoille. Lomakaudella käyttö syö enemmän käyttöoikeutta.
 
 ## Toteuttamista odottavat toiminnallisuudet
 - Käyttäjä voi tallentaa veneen tietoihin tiedostoja kuten käyttöohjeita, kuvia ja osakkaiden keskinäisiä sopimuksia.
