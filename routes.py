@@ -8,7 +8,7 @@ from views.login import login_view, loginuser_view
 from views.register import register_view, registeruser_view
 from views.logout import logout_view
 from views.boats import boats_view, addboat_view, joinboat_view, chooseboat_view
-from views.manageboat import manageboat_view, editboat_view, editboatadmins_view
+from views.manageboat import manageboat_view, editboat_view, editboatadmins_view, edittimerates_view
 from views.transactions import (
     transactions_view, addusage_view,
     addmaintenance_view, addcost_view, addincome_view
@@ -112,15 +112,24 @@ def addincome():
     csrf(request.form['csrf_token'])
     return addincome_view()
 
+
 @app.route('/editboat', methods=['POST'])
 @login_required
 def editboat():
     csrf(request.form['csrf_token'])
     return editboat_view()
 
+
 @app.route('/editboatadmins', methods=['POST'])
 @login_required
 def editboatadmins():
     csrf(request.form['csrf_token'])
     return editboatadmins_view()
+
+
+@app.route('/edittimerates', methods=['POST'])
+@login_required
+def edittimerates():
+    csrf(request.form['csrf_token'])
+    return edittimerates_view()
 
