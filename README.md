@@ -34,8 +34,10 @@ tapahtumat ovat käyttö, talkootyö ja kustannukset.
 
 ## Toteuttamista odottavat toiminnallisuudet
 - Käyttäjä voi tallentaa veneen tietoihin tiedostoja kuten käyttöohjeita, kuvia ja osakkaiden keskinäisiä sopimuksia.
+- Käyttäjä voi tallentaa kuluihin kuvia kuiteista
 
 ## Optiota lisäominaisuuksista
+- Listanäkymä veneen tapahtumiin, mahdollisuus suodattaa näkymää ajan, tapahtumatyypin ja osakkaan perusteella.
 - Käyttäjä voi tehdä veneelle vuotuisen budjetin, jonka toteutumista voidaan seurata raporttinäkymässä.
 - Varauskalenteri, jossa osakkaat voivat varata veneen käyttövuoroja.
 - Varauskalenterin tapahtuman voi merkitä toteutuneeksi, jolloin se muuttuu tapahtumakirjaukseksi
