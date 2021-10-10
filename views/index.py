@@ -50,7 +50,7 @@ def index_view():
     sql = '''
         SELECT CONCAT(first_name, ' ', last_name) AS name, usage_type, SUM(amount) 
             FROM report_base 
-            WHERE usage_type='sailing' OR usage_type='maintenance' 
+            WHERE usage_type IN ('sailing', 'maintenance')
                 AND boat_id=:session_boat
                 AND EXTRACT(YEAR FROM start_date)=:report_year
             GROUP BY usage_type, name 
