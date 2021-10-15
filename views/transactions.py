@@ -46,10 +46,6 @@ def addusage_view():
 
     week_no = start_datetime.isocalendar()[1]
 
-    if week_no < 16 or week_no > 44:
-        flash('Kirjaus on veneen käyttöajan (viikot 16-44) ulkopuolella.')
-        return redirect('transactions')
-
     if start_datetime > end_datetime:
         flash('Aloitusajankohta ei voi olla päättymisajankohdan jälkeen.')
         return redirect('/transactions')
@@ -83,7 +79,11 @@ def addusage_view():
         sql = '''
             UPDATE owners 
                 SET usage_hours = usage_hours - (:usage_hours_per_user * 
-                    (SELECT ratio FROM time_rates WHERE boat_id=:boat_id AND week=:week_no))
+                    (
+                        SELECT COALESCE (
+                            (SELECT ratio 
+                                FROM time_rates 
+                                WHERE boat_id=:boat_id AND week=:week_no), 1.0)))
                 WHERE user_id = :user_id AND boat_id = :boat_id;
             '''
 

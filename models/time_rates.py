@@ -7,8 +7,6 @@ def set_time_rates(time_rates={}, initialize=True):
 
     if initialize:
         new_time_rates = {
-            16: 1.0,
-            17: 1.0,
             18: 1.0,
             19: 1.0,
             20: 1.25,
@@ -30,12 +28,7 @@ def set_time_rates(time_rates={}, initialize=True):
             36: 1.25,
             37: 1.25,
             38: 1.0,
-            39: 1.0,
-            40: 1.0,
-            41: 1.0,
-            42: 1.0,
-            43: 1.0,
-            44: 1.0,
+            39: 1.0
         }
 
         for i in new_time_rates:
