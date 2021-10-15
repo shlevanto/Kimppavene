@@ -13,7 +13,6 @@ def index_view():
             )
         return redirect('/boats')
     
-    # get years with transactions for boat
     sql = '''
         SELECT DISTINCT(
             EXTRACT(YEAR FROM start_date)::INT
@@ -26,9 +25,6 @@ def index_view():
     years_tuples = result.fetchall()
     db.session.commit()
 
-    # unfortunately the query returns the years as date tuples
-    # and I couldn't find a way to convert them to single integers
-    # with sql, so I parse them here in the backend instead
     if years_tuples == []:
         return render_template('index_empty.html')
 

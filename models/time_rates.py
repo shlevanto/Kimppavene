@@ -37,7 +37,7 @@ def set_time_rates(time_rates={}, initialize=True):
             43: 1.0,
             44: 1.0,
         }
-        
+
         for i in new_time_rates:
             sql = '''
                 INSERT INTO time_rates (week, ratio, boat_id)

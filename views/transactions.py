@@ -39,14 +39,11 @@ def transactions_view():
 
 
 def addusage_view():
-    # if users is empty, rerender with error message
-    # if both durations are empty, rerender with error message
     users = request.form.getlist('user')
 
     start_datetime = parse_html_datetime(request.form['start_date'])
     end_datetime = parse_html_datetime(request.form['end_date'])
 
-    # extract week number from start_datetime
     week_no = start_datetime.isocalendar()[1]
 
     if week_no < 16 or week_no > 44:
@@ -62,12 +59,10 @@ def addusage_view():
     else:
         race = False
 
-    # timedelta substractions give time in seconds and days so we need to make it hours
     duration = (end_datetime - start_datetime)
     duration_hours = (duration.seconds // 3600) + (duration.days * 24)
 
     for user in users:
-        # add row to database with usage, duration / no of users and user
         sql = '''
             INSERT INTO transactions (
                 user_id, boat_id, created, usage_id, amount, start_date, end_date, race
@@ -85,8 +80,6 @@ def addusage_view():
             'race': race
         })
 
-        # modify the usage right of the users
-        # based on amount of users and the time rate for the start date
         sql = '''
             UPDATE owners 
                 SET usage_hours = usage_hours - (:usage_hours_per_user * 
@@ -110,16 +103,12 @@ def addusage_view():
 
 
 def addmaintenance_view():
-    # if users is empty, rerender with error message
-    # if both durations are empty, rerender with error message
     users = request.form.getlist('user')
     description = request.form['description']
 
     if not validate_length(description, 255):
         flash('Talkootyön kuvaus on liian pitkä.')
         return redirect('/transactions')
-
-    # check the description input
 
     start_datetime = parse_html_datetime(request.form['start_date'])
     end_datetime = parse_html_datetime(request.form['end_date'])
@@ -128,7 +117,6 @@ def addmaintenance_view():
         flash('Aloitusajankohta ei voi olla päättymisajankohdan jälkeen.')
         return redirect('/transactions')
 
-    # timedelta substractions give time in seconds and days so we need to make it hours
     duration = (end_datetime - start_datetime)
     duration_hours = (duration.seconds // 3600) + (duration.days * 24)
 
@@ -149,7 +137,6 @@ def addmaintenance_view():
             'description': description
         })
 
-        # modify the usage right
         sql = '''
             UPDATE owners 
                 SET usage_hours = usage_hours + :usage_hours_per_user 
@@ -214,7 +201,6 @@ def addcost_view():
 
 
 def addincome_view():
-    # usage_id for income = 4
     amount = request.form['amount']
     income_type = request.form['income_type']
     description = request.form['description']
@@ -230,6 +216,7 @@ def addincome_view():
     start_datetime = parse_html_datetime(request.form['start_date'])
     end_datetime = start_datetime
 
+    # usage_id for income = 4
     sql = '''
         INSERT INTO transactions (
             user_id, boat_id, created, usage_id, amount, start_date, end_date, description, income_type_id
@@ -252,6 +239,6 @@ def addincome_view():
         )
 
     db.session.commit()
-    
+
     flash('Tulo lisätty.')
     return redirect('transactions')

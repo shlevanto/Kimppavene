@@ -6,8 +6,6 @@ from utils import validate_length, validate_year
 
 
 def manageboat_view():
-    print(session['boat']['name'])
-    # check that user is this boats admin
     if not models.boat.is_admin():
         flash(
             'Sinulla ei ole oikeuksia veneen {} tietojen muokkaamiseen.'
@@ -15,27 +13,19 @@ def manageboat_view():
             )
         return redirect('/boats')
 
-    # get boat info
     current_boat = models.boat.get_boat_info()
-
-    # get boat users excluding session user
-    # session user is used by default, include other owners of boat too
     owners = models.boat.owners(exclude=True)
-
-    # get boat usage rights
     time_rates = models.time_rates.get_time_rates()
 
     return render_template('manageboat.html', current_boat=current_boat, owners=owners, time_rates=time_rates)
 
 
 def editboat_view():
-    # get inputs from form
     boat_name = request.form['boat_name']
     boat_type = request.form['boat_type']
     boat_year = request.form['boat_year']
     boat_description = request.form['boat_description']
 
-    # validate inputs
     if not (validate_length(boat_name, 50) and validate_length(boat_type, 50)):
         flash('Veneen nimi tai tyyppi on liian pitkä.')
         return redirect('/manageboat')
@@ -73,7 +63,6 @@ def editboatadmins_view():
     owner_ids = [owner[2] for owner in owners]
     admin_from_form = [int(user) for user in request.form.getlist('user')]
 
-    # list of ids that should be allowed admin rights
     allow_admin = set(owner_ids).intersection(set(admin_from_form))
 
     for user in allow_admin:
@@ -83,7 +72,6 @@ def editboatadmins_view():
         db.session.execute(sql, {'user': user})
         db.session.commit()
 
-    # list of ids that should be revoked admin right
     revoke_admin = set(owner_ids).difference(set(admin_from_form))
 
     for user in revoke_admin:
@@ -96,12 +84,11 @@ def editboatadmins_view():
     return redirect('/manageboat')
 
 def edittimerates_view():
-    # validate input
     for ratio in request.form.getlist('ratio'):
         if float(ratio) <= 0:
             flash('Kertoimen on oltava suurempi kuin nolla.')
             return redirect('/manageboat')
-    
+
     time_rates = [float(ratio) for ratio in request.form.getlist('ratio')]
     weeks = list(range(18,40))
 
@@ -110,6 +97,5 @@ def edittimerates_view():
     # update time rates
     models.time_rates.set_time_rates(time_rates=updated_time_rates, initialize=False)
     flash('Käyttöaikakertoimet päivitetty.')
-    
-    return redirect('/manageboat')
 
+    return redirect('/manageboat')

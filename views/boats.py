@@ -69,8 +69,6 @@ def addboat_view():
         flash('Veneen kuvaus on liian pitkä.')
         return redirect('/boats')
 
-
-    # Inserts new boat, uses the new id to insert ownership
     # a default 12 days = 288 hours of usage is added when creating a boat
 
     sql = '''
@@ -86,6 +84,7 @@ def addboat_view():
                         ), TRUE, 288
                     )
             '''
+    
     # there is a small possibility that two keys are identical
     # while this is a narrow possibility, the key value in database is constrained to unique,
     # so we need to make sure the key is not a duplicate
@@ -112,7 +111,6 @@ def addboat_view():
 
     db.session.commit()
 
-    # set new boat as session boat
     result = db.session.execute('SELECT name, id FROM boats WHERE key=:key', {'key': key})
     db.session.commit()
 
@@ -123,7 +121,6 @@ def addboat_view():
         'name': boat.name
         }
 
-    # initialize time rates
     models.time_rates.set_time_rates(initialize=True)
 
     return redirect('/boats')
@@ -137,7 +134,6 @@ def joinboat_view():
         flash('Avaimen pituus on 6 merkkiä.')
         return redirect('/boats')
 
-    # abort if the user is already an owner of the boat
     sql = '''
         SELECT boats.name FROM owners JOIN boats ON owners.boat_id = boats.id WHERE boats.key=:key AND owners.user_id=:user_id
     '''
@@ -152,7 +148,7 @@ def joinboat_view():
         return redirect('/boats')
 
     try:
-    # a default 12 days = 288 hours of usage is added when creating a boat
+    # a default 12 days = 288 hours of usage is added when joining a boat
         sql = '''
             INSERT INTO owners (boat_id, user_id, usage_hours) 
                 VALUES (
