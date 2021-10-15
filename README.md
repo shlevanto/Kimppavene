@@ -15,7 +15,7 @@ Muumipapalla ja Fredriksonilla on Kimppaveneessä yhteinen vene nimeltä Merenhu
 
 Voit liittyä osakkaaksi Muumipapan ja Fredriksonin Merenhuiske -veneeseen avainkoodilla ```2123f1```.
 
-## Toteutet toiminnallisuudet
+## Toteutetut toiminnallisuudet
 - Palveluun voi luoda käyttäjätilin ja käyttäjä voi kirjautua sisään.
 - Käyttäjä voi luoda tiliinsä liittyvän uuden veneen, jonka osakas hän on. Käyttäjä voi olla osakkaana useammassa kuin yhdessä veneessä.
 - Käyttäjä voi liittyä osakkaaksi olemassaolevaan veneeseen syöttämällä toiselta osakkaalta saamansa veneen avainkoodin järjestelmään.
