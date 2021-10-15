@@ -49,6 +49,10 @@ def addusage_view():
     # extract week number from start_datetime
     week_no = start_datetime.isocalendar()[1]
 
+    if week_no < 16 or week_no > 44:
+        flash('Kirjaus on veneen käyttöajan (viikot 16-44) ulkopuolella.')
+        return redirect('transactions')
+
     if start_datetime > end_datetime:
         flash('Aloitusajankohta ei voi olla päättymisajankohdan jälkeen.')
         return redirect('/transactions')
