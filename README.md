@@ -13,7 +13,7 @@ Voit luoda oman käyttäjätilin tai käyttää valmiiksi luotuja tilejä:
 
 Muumipapalla ja Fredriksonilla on Kimppaveneessä yhteinen vene nimeltä Merenhuiske. Muumipappa on siinä pääkäyttäjänä ja pääsee muokkaamaan veneen tietoja. Fredriksonilla ei ole pääkäyttäjäoikeuksia, joten hän ei pääse käsiksi ylläpitonäkymään (https://kimppavene.herokuapp.com/manageboat).
 
-Voit liittyä osakkaaksi Muumipapan ja Fredriksonin Merenhuiske -veneeseen avainkoodilla ```2123f1```.
+Voit liittyä osakkaaksi Muumipapan ja Fredriksonin Merenhuiske -veneeseen avainkoodilla ```143792```.
 
 ## Toteutetut toiminnallisuudet
 - Palveluun voi luoda käyttäjätilin ja käyttäjä voi kirjautua sisään.
