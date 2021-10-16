@@ -88,27 +88,3 @@ CREATE VIEW report_base AS
      JOIN boats ON ((t.boat_id = boats.id)))
      LEFT JOIN cost_types ON ((t.cost_type_id = cost_types.id))
      LEFT JOIN income_types ON ((t.income_type_id = income_types.id));
-
--- Initial values
-INSERT INTO usage (usage_type) VALUES
-  ('Käyttö'),
-  ('Talkoo'),
-  ('Kulu'),
-  ('Tulo')
-;
-
-INSERT INTO cost_types (type) VALUES
-  ('Huolto ja ylläpito'),
-  ('Korjaukset'),
-  ('Uushankinnat'),
-  ('Laituripaikka ja telakointi'),
-  ('Talkoot ja juhlat'),
-  ('Kilpailu')
- ;
-
-INSERT INTO income_types (type) VALUES
-  ('Myyntitulo'),
-  ('Vuokra'),
-  ('Lahjoitus'),
-  ('Ylimääräinen vastike')
-;
