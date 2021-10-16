@@ -81,7 +81,9 @@ CREATE VIEW report_base AS
     users.first_name,
     users.last_name,
     cost_types.type AS cost_type,
-    income_types.type AS income_type
+    income_types.type AS income_type,
+    t.attachment_name,
+    t.id as transaction_id
    FROM (((transactions t
      JOIN users ON ((t.user_id = users.id)))
      JOIN usage ON ((t.usage_id = usage.id)))
