@@ -15,6 +15,11 @@ Muumipapalla ja Fredriksonilla on Kimppaveneessä yhteinen vene nimeltä Merenhu
 
 Voit liittyä osakkaaksi Muumipapan ja Fredriksonin Merenhuiske -veneeseen avainkoodilla ```143792```.
 
+## Sovelluksen käynnistäminen paikallisesti
+1. Kloonaa repositorio koneellesi
+2. Alusta tietokanta komennolla ```psql kimppavene < schema.sql```
+3. Aja oletusarvot tapahtumatyyppeihin, kuluihin ja tuloihin ```psql kimppavene < init.sql```
+
 ## Toteutetut toiminnallisuudet
 - Palveluun voi luoda käyttäjätilin ja käyttäjä voi kirjautua sisään.
 - Käyttäjä voi luoda tiliinsä liittyvän uuden veneen, jonka osakas hän on. Käyttäjä voi olla osakkaana useammassa kuin yhdessä veneessä.
