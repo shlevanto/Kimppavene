@@ -29,6 +29,9 @@ def transactions_view():
 
     years = models.boat.get_years()
 
+    if not years:
+        years = []
+
     sql = '''SELECT id, usage_type FROM usage GROUP BY id'''
     result = db.session.execute(sql)
     db.session.commit()
