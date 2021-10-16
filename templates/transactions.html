@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-
+<h3>Kirjaa tapahtumia</h3>
 <div class="accordion" id="accordionTransactions">
   
   <div class="accordion-item">
@@ -187,6 +187,7 @@
   </div>
 
 </div>
-
-<h2>Tähän lista veneen tapahtumista, valitse vuosi, kaikki tapahtumat, luokittain ja osakkaittain.</h2>
+{% include "transaction_list.html" %}
 {% endblock %}
+
+

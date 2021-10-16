@@ -15,26 +15,64 @@ def transactions_view():
 
         return redirect('/boats')
 
-    # session user is used by default, include other owners of boat too
     owners = models.boat.owners(exclude=True)
 
-    # get cost types for forms
     sql = '''SELECT id, type FROM cost_types'''
     result = db.session.execute(sql)
     db.session.commit()
     cost_types = result.fetchall()
 
-    # get income types for forms
     sql = '''SELECT id, type FROM income_types'''
     result = db.session.execute(sql)
     db.session.commit()
     income_types = result.fetchall()
 
+    years = models.boat.get_years()
+
+    sql = '''SELECT id, usage_type FROM usage GROUP BY id'''
+    result = db.session.execute(sql)
+    db.session.commit()
+    usages = result.fetchall()
+
+    transactions = []
+
+    if request.args:
+        usage_type = request.args['usage_type']
+        report_year = request.args['year']
+
+        if len(usage_type) > 2 or len(report_year) > 4:
+            return redirect('/transactions')
+
+        sql = '''
+            SELECT  amount, start_date, end_date, 
+                    description, 
+                    cost_type_id, cost_type, 
+                    income_type_id, income_type, 
+                    CONCAT(first_name, ' ', last_name) as name
+                FROM report_base
+                    WHERE boat_id=:session_boat
+                    AND EXTRACT(YEAR FROM start_date)=:report_year
+                    AND usage_id=:usage_type
+                ORDER BY start_date
+            '''
+        result = db.session.execute(sql, {
+            'session_boat': session['boat']['id'],
+            'report_year': report_year,
+            'usage_type': usage_type
+            })
+ 
+        db.session.commit()
+        transactions = result.fetchall()
+
+
     return render_template(
         'transactions.html',
         owners=owners,
         income_types=income_types,
-        cost_types=cost_types
+        cost_types=cost_types,
+        usages=usages,
+        years=years,
+        transactions=transactions
         )
 
 
@@ -242,3 +280,9 @@ def addincome_view():
 
     flash('Tulo lisätty.')
     return redirect('transactions')
+
+
+def transactionlist_view():
+    
+    return render_template('transaction_list.html', usages=usages, transactions=transactions, years=years)
+

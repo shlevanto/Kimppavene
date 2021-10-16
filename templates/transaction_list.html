@@ -1,0 +1,52 @@
+<hr/>
+<h3>Valitse näytettävät tapahtumat</h3>
+
+<div>
+  <form action="/transactions" method="GET">
+    <div class="form-group col-4">
+      <select class="form-select" name="year" required>
+      <option selected>Valitse vuosi </option>
+        {% for y in years %}
+          <option value="{{ y }}">{{ y }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group col-4">
+      <select class="form-select" name="usage_type" required>
+      <option selected>Valitse tapahtumatyyppi</option>
+        {% for u in usages %}
+          <option value="{{ u.id }}">{{ u.usage_type }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group col-4">
+      <button type="submit" class="btn btn-primary">Näytä tapahtumat</button>
+    </div>
+  </form>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Alkanut</th>
+      <th scope="col">Päättynyt</th>
+      <th scope="col">Osakas</th>
+      <th scope="col">Määrä</th>
+      <th scope="col">Kuvaus</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for t in transactions %}
+    <tr>
+        <td>{{ t.start_date }}</td>
+        <td>{{ t.end_date }}</td>
+        <td>{{ t.name }}</td>
+        <td>{{ t.amount }}</td>
+        <td> 
+          {{ t.description }}
+          {% if t.cost_type %}/ {{ t.cost_type }}{% endif %}
+          {% if t.income_type %}/ {{ t.income_type }}{% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
