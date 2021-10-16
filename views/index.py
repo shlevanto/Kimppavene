@@ -26,12 +26,12 @@ def index_view():
     
     # Chart 1 usage and maintenance work 
     sql = '''
-        SELECT CONCAT(first_name, ' ', last_name) AS name, usage_type, SUM(amount) 
+        SELECT CONCAT(first_name, ' ', last_name) AS name, usage_type, usage_id, SUM(amount) 
             FROM report_base 
-            WHERE usage_type IN ('sailing', 'maintenance')
+            WHERE usage_id IN (1,2)
                 AND boat_id=:session_boat
                 AND EXTRACT(YEAR FROM start_date)=:report_year
-            GROUP BY usage_type, name 
+            GROUP BY usage_type, usage_id, name 
             ORDER BY name;
     '''
     result = db.session.execute(sql, {
@@ -50,8 +50,8 @@ def index_view():
     if len(data_frame.index) != 0:
         data_frame.columns = data[0].keys()
         labels_usage = pd.unique(data_frame['name'])
-        data_usage_sailing = data_frame[data_frame['usage_type']=='sailing']['sum']
-        data_usage_maintenance = data_frame[data_frame['usage_type']=='maintenance']['sum']
+        data_usage_sailing = data_frame[data_frame['usage_id']==1]['sum']
+        data_usage_maintenance = data_frame[data_frame['usage_id']==2]['sum']
 
     # Chart 2 usage right left
     sql = '''
