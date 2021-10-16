@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, session, flash
+from flask import render_template, request, redirect, session, flash, make_response
 from db import db
 from utils import parse_html_datetime, validate_length
 import models.boat
@@ -57,7 +57,9 @@ def transactions_view():
                     description, 
                     cost_type_id, cost_type, 
                     income_type_id, income_type, 
-                    CONCAT(first_name, ' ', last_name) as name
+                    CONCAT(first_name, ' ', last_name) as name,
+                    attachment_name,
+                    transaction_id
                 FROM report_base
                     WHERE boat_id=:session_boat
                     AND EXTRACT(YEAR FROM start_date)=:report_year
@@ -69,7 +71,7 @@ def transactions_view():
             'report_year': report_year,
             'usage_type': usage_type
             })
- 
+
         db.session.commit()
         transactions = result.fetchall()
 
@@ -219,13 +221,28 @@ def addcost_view():
     start_datetime = parse_html_datetime(request.form['start_date'])
     end_datetime = start_datetime
 
+    file = request.files['file']
+
+    name = file.filename
+    print(name)
+
+    if (not name.endswith('.jpg')) and (not name.endswith('.png')):
+        flash('Väärä tiedostomuoto. Kuittikuvan on oltava jpg tai png.')
+        return redirect('/transactions')
+
+    data = file.read()
+
+    if len(data) > 800 * 1024:
+        flash('Suurin tiedostokoko on 800KB')
+        return redirect('/transactions')
+
     # usage id for cost = 3
     sql = '''
         INSERT INTO transactions (
-            user_id, boat_id, created, usage_id, amount, start_date, end_date, description, cost_type_id
+            user_id, boat_id, created, usage_id, amount, start_date, end_date, description, cost_type_id, attachment_name, attachment_file
             ) 
             VALUES (
-                :user_id, :boat_id, NOW(), 3, :amount, :start_date, :end_date, :description, :cost_type
+                :user_id, :boat_id, NOW(), 3, :amount, :start_date, :end_date, :description, :cost_type, :file_name, :file
                 )
         '''
 
@@ -237,7 +254,9 @@ def addcost_view():
             'start_date': start_datetime,
             'end_date': end_datetime,
             'description': description,
-            'cost_type': cost_type
+            'cost_type': cost_type,
+            'file_name': name,
+            'file': data
             }
         )
 
@@ -291,7 +310,32 @@ def addincome_view():
     return redirect('transactions')
 
 
-def transactionlist_view():
-    
-    return render_template('transaction_list.html', usages=usages, transactions=transactions, years=years)
+def show_view(image_id):
+    sql = '''
+        SELECT boat_id FROM transactions WHERE id=:image_id
+    '''
 
+    result = db.session.execute(sql, {'image_id': image_id})
+    db.session.commit()
+
+    image_boat = result.fetchone()
+
+    if not image_boat:
+        return redirect('/transactions')
+
+    image_boat = image_boat[0]
+
+    if int(image_boat) != int(session['boat']['id']):
+        return redirect('/transactions')
+
+    sql = '''
+        SELECT attachment_file FROM transactions WHERE id=:image_id
+    '''
+    result = db.session.execute(sql, {'image_id': image_id})
+    db.session.commit()
+    data = result.fetchone()[0]
+
+    response = make_response(bytes(data))
+    response.headers.set('Content-Type', 'image/jpeg')
+
+    return response

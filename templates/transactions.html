@@ -115,7 +115,7 @@
     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionTransactions">
       <div class="accordion-body">
         
-        <form action="/addcost" method="POST">
+        <form action="/addcost" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">  
           <div class="form-group col-6">
             <label for="started_date">Päivämäärä</label>        
@@ -137,6 +137,10 @@
           <label for="description">Kuvaus</label>        
             <input type="text" class="form-control" name="description" id="description" required>
           </div>
+          <div class="form-group col-6">
+            Kuittikuva (.jpg tai .png): <input type="file" name="file">
+          </div>
+          <br/>
           <div class="form-group col-6">
             <button type="submit" class="btn btn-primary">Kirjaa</button>
           </div>    

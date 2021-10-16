@@ -32,6 +32,7 @@
       <th scope="col">Osakas</th>
       <th scope="col">Määrä</th>
       <th scope="col">Kuvaus</th>
+      <th/>
     </tr>
   </thead>
   <tbody>
@@ -45,6 +46,11 @@
           {% if t.description %}{{ t.description }}{% endif %}
           {% if t.cost_type %}/ {{ t.cost_type }}{% endif %}
           {% if t.income_type %}/ {{ t.income_type }}{% endif %}
+        </td>
+        <td>
+        {% if t.attachment_name %}
+          <a href="/show/{{ t.transaction_id }}" target="_blank">Näytä kuva</a>
+        {% endif %}
         </td>
     </tr>
     {% endfor %}

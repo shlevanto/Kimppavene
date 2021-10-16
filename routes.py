@@ -11,7 +11,7 @@ from views.boats import boats_view, addboat_view, joinboat_view, chooseboat_view
 from views.manageboat import manageboat_view, editboat_view, editboatadmins_view, edittimerates_view
 from views.transactions import (
     transactions_view, addusage_view,
-    addmaintenance_view, addcost_view, addincome_view
+    addmaintenance_view, addcost_view, addincome_view, show_view
     )
 
 
@@ -133,3 +133,8 @@ def edittimerates():
     csrf(request.form['csrf_token'])
     return edittimerates_view()
 
+
+@app.route('/show/<int:id>')
+@login_required
+def show(id):
+    return show_view(id)
