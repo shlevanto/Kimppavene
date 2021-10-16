@@ -79,11 +79,15 @@ CREATE VIEW report_base AS
     t.cost_type_id,
     t.income_type_id,
     users.first_name,
-    users.last_name
+    users.last_name,
+    cost_types.type AS cost_type,
+    income_types.type AS income_type
    FROM (((transactions t
      JOIN users ON ((t.user_id = users.id)))
      JOIN usage ON ((t.usage_id = usage.id)))
-     JOIN boats ON ((t.boat_id = boats.id)));
+     JOIN boats ON ((t.boat_id = boats.id)))
+     LEFT JOIN cost_types ON ((t.cost_type_id = cost_types.id))
+     LEFT JOIN income_types ON ((t.income_type_id = income_types.id));
 
 -- Initial values
 INSERT INTO usage (usage_type) VALUES
