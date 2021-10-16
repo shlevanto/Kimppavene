@@ -34,15 +34,16 @@ tapahtumat ovat käyttö, talkootyö ja kustannukset.
 - Veneen pääkäyttäjä voi antaa muille veneen osakkaille pääkäyttäjän oikeudet.
 - Kun luodaan uusi vene, sille määrittyy oletuskertoimet käyttöoikeuksien kertoimille. Kertoimet on määritelty viikkojen numeroiden perusteella. Ideana on, että lomakaudella käyttö syö enemmän käyttöoikeutta.
 - Käyttöoikeuksien kertoimia voi määritellä pääkäyttäjänäkymässä.
+- Käyttäjä voi tallentaa kuluihin kuvia kuiteista
+- Listanäkymä veneen tapahtumiin
 
 ## Keskeneräiset toiminnallisuudet
 
 ## Toteuttamista odottavat toiminnallisuudet
-- Käyttäjä voi tallentaa veneen tietoihin tiedostoja kuten käyttöohjeita, kuvia ja osakkaiden keskinäisiä sopimuksia.
-- Käyttäjä voi tallentaa kuluihin kuvia kuiteista
 
 ## Optiota lisäominaisuuksista
-- Listanäkymä veneen tapahtumiin, mahdollisuus suodattaa näkymää ajan, tapahtumatyypin ja osakkaan perusteella.
+- Käyttäjä voi tallentaa veneen tietoihin tiedostoja kuten käyttöohjeita, kuvia ja osakkaiden keskinäisiä sopimuksia.
+- Listanäkymän suodattaminen tarkemman ajanjakson ja osakkaan perusteella.
 - Käyttäjä voi tehdä veneelle vuotuisen budjetin, jonka toteutumista voidaan seurata raporttinäkymässä.
 - Varauskalenteri, jossa osakkaat voivat varata veneen käyttövuoroja.
 - Varauskalenterin tapahtuman voi merkitä toteutuneeksi, jolloin se muuttuu tapahtumakirjaukseksi
