@@ -87,10 +87,10 @@ CREATE VIEW report_base AS
 
 -- Initial values
 INSERT INTO usage (usage_type) VALUES
-  ('sailing'),
-  ('maintenance'),
-  ('cost'),
-  ('income')
+  ('Käyttö'),
+  ('Talkoo'),
+  ('Kulu'),
+  ('Tulo')
 ;
 
 INSERT INTO cost_types (type) VALUES
