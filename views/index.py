@@ -1,6 +1,7 @@
 import pandas as pd
 from flask import render_template, session, redirect, flash, request
 from db import db
+import models.boat
 
 
 def index_view(): 
@@ -12,35 +13,16 @@ def index_view():
             '''
             )
         return redirect('/boats')
-    
-    sql = '''
-        SELECT DISTINCT(
-            EXTRACT(YEAR FROM start_date)::INT
-            ) AS year
-            FROM report_base 
-            WHERE boat_id=:session_boat
-            ORDER BY year DESC
-    '''
-    result = db.session.execute(sql, {'session_boat': session['boat']['id']})
-    years_tuples = result.fetchall()
-    db.session.commit()
 
-    if years_tuples == []:
+    years = models.boat.get_years()
+
+    if not years:
         return render_template('index_empty.html')
 
-    else: 
-        years = []
-
-        for year in years_tuples:
-            if year[0]:
-                years.append(year[0])
-            else:
-                return render_template('index_empty')
-
-        if 'year' in request.args:
-            report_year = request.args['year']
-        else:
-            report_year = years[0]
+    if 'year' in request.args:
+        report_year = request.args['year']
+    else:
+        report_year = years[0]
     
     # Chart 1 usage and maintenance work 
     sql = '''

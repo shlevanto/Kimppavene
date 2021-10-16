@@ -76,3 +76,33 @@ def get_boat_info():
     db.session.commit()
 
     return result.fetchone()
+
+
+def get_years():
+    sql = '''
+        SELECT DISTINCT(
+            EXTRACT(YEAR FROM start_date)::INT
+            ) AS year
+            FROM report_base 
+            WHERE boat_id=:session_boat
+            ORDER BY year DESC
+    '''
+
+    result = db.session.execute(sql, {'session_boat': session['boat']['id']})
+    years_tuples = result.fetchall()
+    db.session.commit()
+
+    if years_tuples == []:
+        return False
+
+    else:
+        years = []
+
+        for year in years_tuples:
+            if year[0]:
+                years.append(year[0])
+            else:
+                return False
+    
+    return years
+
