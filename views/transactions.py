@@ -44,7 +44,13 @@ def transactions_view():
             return redirect('/transactions')
 
         sql = '''
-            SELECT  amount, start_date, end_date, 
+            SELECT  amount, 
+                    EXTRACT(YEAR FROM start_date)::INTEGER AS start_year, 
+                    EXTRACT(MONTH FROM start_date)::INTEGER AS start_month,
+                    EXTRACT(DAY FROM start_date)::INTEGER AS start_day,
+                    EXTRACT(YEAR FROM end_date)::INTEGER AS end_year, 
+                    EXTRACT(MONTH FROM end_date)::INTEGER AS end_month,
+                    EXTRACT(DAY FROM end_date)::INTEGER AS end_day,
                     description, 
                     cost_type_id, cost_type, 
                     income_type_id, income_type, 

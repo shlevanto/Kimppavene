@@ -37,12 +37,12 @@
   <tbody>
     {% for t in transactions %}
     <tr>
-        <td>{{ t.start_date }}</td>
-        <td>{{ t.end_date }}</td>
+        <td>{{ t.start_day }}.{{ t.start_month }}.{{ t.start_year }}</td>
+        <td>{{ t.end_day }}.{{ t.end_month }}.{{ t.end_year }}</td>
         <td>{{ t.name }}</td>
         <td>{{ t.amount }}</td>
         <td> 
-          {{ t.description }}
+          {% if t.description %}{{ t.description }}{% endif %}
           {% if t.cost_type %}/ {{ t.cost_type }}{% endif %}
           {% if t.income_type %}/ {{ t.income_type }}{% endif %}
         </td>
