@@ -79,7 +79,7 @@ def chooseboat():
     return chooseboat_view()
 
 
-@app.route('/transactions')
+@app.route('/transactions', methods=['GET'])
 @login_required
 def transactions():
     return transactions_view()
