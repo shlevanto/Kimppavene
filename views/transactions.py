@@ -312,15 +312,16 @@ def addincome_view():
 
 def show_view(image_id):
     sql = '''
-        SELECT boat_id FROM transactions WHERE id=:image_id
+        SELECT boat_id, attachment_name FROM transactions WHERE id=:image_id
     '''
 
     result = db.session.execute(sql, {'image_id': image_id})
     db.session.commit()
 
     image_boat = result.fetchone()
+    print(image_boat)
 
-    if not image_boat:
+    if not image_boat or not image_boat[1]:
         return redirect('/transactions')
 
     image_boat = image_boat[0]
@@ -331,6 +332,7 @@ def show_view(image_id):
     sql = '''
         SELECT attachment_file FROM transactions WHERE id=:image_id
     '''
+
     result = db.session.execute(sql, {'image_id': image_id})
     db.session.commit()
     data = result.fetchone()[0]
