@@ -106,7 +106,7 @@ def index_view():
         SELECT CONCAT(first_name, ' ', last_name) AS name, SUM(amount) 
             FROM report_base 
             JOIN cost_types ON report_base.cost_type_id = cost_types.id 
-            WHERE boat_id = :session_boat AND usage_type='cost' AND EXTRACT(YEAR FROM start_date) = :report_year 
+            WHERE boat_id = :session_boat AND usage_id=3 AND EXTRACT(YEAR FROM start_date) = :report_year 
             GROUP BY name;
     '''
     result = db.session.execute(sql, {'session_boat': session['boat']['id'], 'report_year': report_year})
