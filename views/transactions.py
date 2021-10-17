@@ -224,15 +224,17 @@ def addcost_view():
     file = request.files['file']
 
     name = file.filename
-    print(name)
 
-    if (not name.endswith('.jpg')) and (not name.endswith('.png')):
+    if name and not name.endswith('.jpg') and not name.endswith('.png'):
         flash('Väärä tiedostomuoto. Kuittikuvan on oltava jpg tai png.')
         return redirect('/transactions')
 
-    data = file.read()
+    data = None
 
-    if len(data) > 800 * 1024:
+    if name:
+        data = file.read()
+
+    if data and len(data) > 800 * 1024:
         flash('Suurin tiedostokoko on 800KB')
         return redirect('/transactions')
 
