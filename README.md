@@ -22,27 +22,42 @@ Voit liittyä osakkaaksi Muumipapan ja Fredriksonin Merenhuiske -veneeseen avain
 
 ## Toteutetut toiminnallisuudet
 - Palveluun voi luoda käyttäjätilin ja käyttäjä voi kirjautua sisään.
+
+### Etusivu
+- Raporttinäkymä, josta kirjautunut käyttäjä voi seurta veneen käyttömäärää, tehtyjen talkootuntien määrää sekä osakas- ja kululajikohtisesti veneen kuluja.
+
+### Veneet
 - Käyttäjä voi luoda tiliinsä liittyvän uuden veneen, jonka osakas hän on. Käyttäjä voi olla osakkaana useammassa kuin yhdessä veneessä.
 - Käyttäjä voi liittyä osakkaaksi olemassaolevaan veneeseen syöttämällä toiselta osakkaalta saamansa veneen avainkoodin järjestelmään.
-- Käyttäjä voi tehdä tapahtumakirjauksia veneelle. Kirjattavat
-tapahtumat ovat käyttö, talkootyö ja kustannukset.
-- Käyttöoikeuskirjanpito. Veneelle on käyttäjäkohtainen, vuosittainen oletuskäyttöoikeus 12 päivää.
-- Tehdyt talkootyöt kasvattavat käyttöoikeutta ja käyttö vähentää.
+- Käyttöoikeuskirjanpito. Käyttäjälle määrittyy venekohtainen, vuosittainen oletuskäyttöoikeus 12 päivää kun käyttäjä luo uuden veneen tai liittyy olemassa olevaan veneeseen.
+
+### Veneen pääkäyttäjänäkymä
 - Veneellä on yksi tai useampia pääkäyttäjiä, jotka voivat muokata veneen tietoja.
+- Pääkäyttäjänäkymään pääsee klikkaamalla 'Muokkaa' -painiketta Veneet -sivun veneen tiedoissa.
 - Veneen luonut käyttäjä määrittyy aina luomansa veneen pääkäyttäjäksi.
-- Järjestelmässä on raporttinäkymiä, joista veneen osakas voi seurata omaa ja muiden saman veneen osakkaiden käyttöä. Veneen käyttömäärä, tehtyjen talkootuntien määrä ja osakas- / venekohtaiset kulut ja investoinnit.
-- Veneen pääkäyttäjä voi antaa muille veneen osakkaille pääkäyttäjän oikeudet.
-- Kun luodaan uusi vene, sille määrittyy oletuskertoimet käyttöoikeuksien kertoimille. Kertoimet on määritelty viikkojen numeroiden perusteella. Ideana on, että lomakaudella käyttö syö enemmän käyttöoikeutta.
-- Käyttöoikeuksien kertoimia voi määritellä pääkäyttäjänäkymässä.
+- Veneen pääkäyttäjä voi antaa muille veneen osakkaille pääkäyttäjän oikeudet tai poistaa ne. Omia pääkäyttäjäoikeuksiaan ei voi poistaa eli veneellä on aina vähintään yksi pääkäyttäjä.
+- Uudelle veneelle määrittyy oletusarvot käyttöoikeuksien kertoimille.
+- Kertoimet on määritelty viikkojen numeroiden perusteella. Ideana on, että lomakaudella käyttö syö enemmän käyttöoikeutta.
+- Käyttöoikeuksien kertoimia voi muokata pääkäyttäjänäkymässä.
+
+### Tapahtumat
+- Käyttäjä voi tehdä tapahtumakirjauksia veneelle. Kirjattavat
+tapahtumat ovat käyttö, talkootyö, kulut ja tulot.
+- Tehdyt talkootyöt kasvattavat käyttöoikeutta kertoimella 3 ja käyttö vähentää käyttöajan kertoimella. Jos samanaikaisia käyttäjiä on useampia, jaetaan kullekin osakkaalle kirjautuvat käyttötunnit käyttäjien määrällä.
 - Käyttäjä voi tallentaa kuluihin kuvia kuiteista
-- Listanäkymä veneen tapahtumiin
+- Listanäkymä veneen tapahtumiin vuosittain ja tapahtumalajeittain valittavana.
 
 ## Optiota lisäominaisuuksista
 - Käyttäjä voi tallentaa veneen tietoihin tiedostoja kuten käyttöohjeita, kuvia ja osakkaiden keskinäisiä sopimuksia.
-- Listanäkymän suodattaminen tarkemman ajanjakson ja osakkaan perusteella.
+- Tapahtumien listanäkymän suodattaminen tarkemman ajanjakson ja osakkaan perusteella.
 - Käyttäjä voi tehdä veneelle vuotuisen budjetin, jonka toteutumista voidaan seurata raporttinäkymässä.
 - Varauskalenteri, jossa osakkaat voivat varata veneen käyttövuoroja.
-- Varauskalenterin tapahtuman voi merkitä toteutuneeksi, jolloin se muuttuu tapahtumakirjaukseksi
+- Varauskalenterin tapahtuman voi merkitä toteutuneeksi, jolloin se muuttuu tapahtumakirjaukseksi.
+- Veneiden ja käyttäjien poistaminen / piilottaminen.
+- Uuden käyttövuoden käynnistäminen, antaa jokaiselle osakkaalle oletusarvoisen käyttöaikakiintiön.
+- Kirjattujen tapahtumien muokkaaminen.
 
-## Luonnos tietokantakaaviosta
-<img src='CoBoat.png'> </img>
+## Tietokantakaavio
+Tässä kuvattujen taulujen lisäksi tietokannassa on yksi näkymä eli view, jota käytetään raporttikuvaajien ja tapahtumalistauksen tekemiseen.
+
+<img src='CoBoat.png'></img>
