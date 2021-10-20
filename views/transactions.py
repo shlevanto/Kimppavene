@@ -58,8 +58,8 @@ def transactions_view():
                     cost_type_id, cost_type, 
                     income_type_id, income_type, 
                     CONCAT(first_name, ' ', last_name) as name,
-                    attachment_name,
-                    transaction_id
+                    transaction_id,
+                    file_id
                 FROM report_base
                     WHERE boat_id=:session_boat
                     AND EXTRACT(YEAR FROM start_date)=:report_year
@@ -238,14 +238,24 @@ def addcost_view():
         flash('Suurin tiedostokoko on 800KB')
         return redirect('/transactions')
 
-    # usage id for cost = 3
     sql = '''
-        INSERT INTO transactions (
-            user_id, boat_id, created, usage_id, amount, start_date, end_date, description, cost_type_id, attachment_name, attachment_file
-            ) 
-            VALUES (
-                :user_id, :boat_id, NOW(), 3, :amount, :start_date, :end_date, :description, :cost_type, :file_name, :file
+        WITH new_transaction_id AS (
+            INSERT INTO transactions (
+                user_id, boat_id, created, usage_id, amount, start_date, end_date, description, cost_type_id
+                ) 
+                VALUES (
+                    :user_id, :boat_id, NOW(), 3, :amount, :start_date, :end_date, :description, :cost_type
+                    )
+                RETURNING id
+            )
+        
+            INSERT INTO files (name, file, boat_id, transaction_id) VALUES (:file_name, :file, :boat_id,
+                (CASE
+                    WHEN :file_name = '' THEN NULL
+                    ELSE (SELECT id FROM new_transaction_id)
+                END
                 )
+            ) 
         '''
 
     db.session.execute(
@@ -312,33 +322,21 @@ def addincome_view():
     return redirect('transactions')
 
 
-def show_view(image_id):
+def show_view(file_id):
     sql = '''
-        SELECT boat_id, attachment_name FROM transactions WHERE id=:image_id
+        SELECT boat_id, file FROM files WHERE id=:file_id AND boat_id=:session_boat 
     '''
-
-    result = db.session.execute(sql, {'image_id': image_id})
+    result = db.session.execute(sql, {
+        'file_id': file_id,
+        'session_boat': session['boat']['id']
+    })
     db.session.commit()
+    file = result.fetchone()
 
-    image_boat = result.fetchone()
-    print(image_boat)
-
-    if not image_boat or not image_boat[1]:
+    if not file:
         return redirect('/transactions')
 
-    image_boat = image_boat[0]
-
-    if int(image_boat) != int(session['boat']['id']):
-        return redirect('/transactions')
-
-    sql = '''
-        SELECT attachment_file FROM transactions WHERE id=:image_id
-    '''
-
-    result = db.session.execute(sql, {'image_id': image_id})
-    db.session.commit()
-    data = result.fetchone()[0]
-
+    data = file[1]
     response = make_response(bytes(data))
     response.headers.set('Content-Type', 'image/jpeg')
 
