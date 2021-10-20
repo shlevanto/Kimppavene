@@ -5,9 +5,10 @@
 {% endblock %}
 
 {% block content %}
+<h3>Raportit</h3>
 <div class="form-group col-4">
     <form action="/" method="GET">
-        <label for="years">Vuosi</label>        
+        <label for="years"></label>        
         <select class="form-select" name="year" onchange="this.form.submit()" required>
             <option selected>Valitse vuosi </option>
             {% for y in years %}

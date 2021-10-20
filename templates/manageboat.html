@@ -95,7 +95,7 @@
         <form action="/edittimerates" method="POST">
           <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">  
           {% for rate in time_rates %}
-            <div class="col-xs-2">
+            <div class="form-group col-1">
               <label for="ratio">Viikko {{ rate.week }}</label>   
               <input type="text" class="form-control" name="ratio" id="ratio" value="{{ rate.ratio }}" maxlength="4">
             </div>
