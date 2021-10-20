@@ -47,7 +47,7 @@ tapahtumat ovat käyttö, talkootyö, kulut ja tulot.
 - Käyttäjä voi tallentaa kuluihin kuvia kuiteista
 - Listanäkymä veneen tapahtumiin vuosittain ja tapahtumalajeittain valittavana.
 
-## Optiota lisäominaisuuksista
+## Optiota lisäominaisuuksiksi
 - Käyttäjä voi tallentaa veneen tietoihin tiedostoja kuten käyttöohjeita, kuvia ja osakkaiden keskinäisiä sopimuksia.
 - Tapahtumien listanäkymän suodattaminen tarkemman ajanjakson ja osakkaan perusteella.
 - Käyttäjä voi tehdä veneelle vuotuisen budjetin, jonka toteutumista voidaan seurata raporttinäkymässä.
