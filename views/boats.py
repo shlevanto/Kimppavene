@@ -8,23 +8,15 @@ import models.time_rates
 
 
 def boats_view():
-    # 1.1. get owners of current boat and info on whether they are admins for the boat
     if session['boat']['id'] == '':
         current_boat = None
         owners = None
         is_admin = None
     else:
-
         current_boat = models.boat.get_boat_info()
-
-        # get owners and admin status for current / session boat
         owners = models.boat.owners()
-
-        # is the current user an admin of the current boat?
         is_admin = models.boat.is_admin()
 
-
-    # 2. get all boats of a user
     user_boats = models.boat.user_boats()
 
     return render_template(
@@ -84,7 +76,7 @@ def addboat_view():
                         ), TRUE, 288
                     )
             '''
-    
+
     # there is a small possibility that two keys are identical
     # while this is a narrow possibility, the key value in database is constrained to unique,
     # so we need to make sure the key is not a duplicate

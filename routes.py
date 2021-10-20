@@ -136,5 +136,5 @@ def edittimerates():
 
 @app.route('/show/<int:id>')
 @login_required
-def show(id):
-    return show_view(id)
+def show(file_id):
+    return show_view(file_id)

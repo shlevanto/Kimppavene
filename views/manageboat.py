@@ -1,4 +1,5 @@
 from flask import render_template, redirect, flash, session, request
+from datetime import date
 from db import db
 import models.boat
 import models.time_rates
@@ -17,7 +18,12 @@ def manageboat_view():
     owners = models.boat.owners(exclude=True)
     time_rates = models.time_rates.get_time_rates()
 
-    return render_template('manageboat.html', current_boat=current_boat, owners=owners, time_rates=time_rates)
+    return render_template(
+        'manageboat.html',
+        current_boat=current_boat,
+        owners=owners,
+        time_rates=time_rates
+        )
 
 
 def editboat_view():
@@ -90,7 +96,7 @@ def edittimerates_view():
             return redirect('/manageboat')
 
     time_rates = [float(ratio) for ratio in request.form.getlist('ratio')]
-    weeks = list(range(18,40))
+    weeks = list(range(18, 40))
 
     updated_time_rates = dict(zip(weeks, time_rates))
 

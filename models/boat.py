@@ -70,7 +70,8 @@ def get_boat_info():
     sql = '''
         SELECT id, name, type, year, description, key 
             FROM boats 
-            WHERE id=:session_boat'''
+            WHERE id=:session_boat
+    '''
 
     result = db.session.execute(sql, {'session_boat': session['boat']['id']})
     db.session.commit()
@@ -95,14 +96,12 @@ def get_years():
     if years_tuples == []:
         return False
 
-    else:
-        years = []
+    years = []
 
-        for year in years_tuples:
-            if year[0]:
-                years.append(year[0])
-            else:
-                return False
-    
+    for year in years_tuples:
+        if year[0]:
+            years.append(year[0])
+        else:
+            return False
+
     return years
-

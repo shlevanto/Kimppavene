@@ -4,7 +4,7 @@ from db import db
 import models.boat
 
 
-def index_view(): 
+def index_view():
     if session['boat']['id'] == '':
         flash(
             '''
@@ -23,8 +23,8 @@ def index_view():
         report_year = request.args['year']
     else:
         report_year = years[0]
-    
-    # Chart 1 usage and maintenance work 
+
+    # Chart 1 usage and maintenance work
     sql = '''
         SELECT CONCAT(first_name, ' ', last_name) AS name, usage_type, usage_id, SUM(amount) 
             FROM report_base 
@@ -35,7 +35,7 @@ def index_view():
             ORDER BY name;
     '''
     result = db.session.execute(sql, {
-        'session_boat': session['boat']['id'], 
+        'session_boat': session['boat']['id'],
         'report_year': report_year})
     data = result.fetchall()
     db.session.commit()
@@ -50,8 +50,8 @@ def index_view():
     if len(data_frame.index) != 0:
         data_frame.columns = data[0].keys()
         labels_usage = pd.unique(data_frame['name'])
-        data_usage_sailing = data_frame[data_frame['usage_id']==1]['sum']
-        data_usage_maintenance = data_frame[data_frame['usage_id']==2]['sum']
+        data_usage_sailing = data_frame[data_frame['usage_id'] == 1]['sum']
+        data_usage_maintenance = data_frame[data_frame['usage_id'] == 2]['sum']
 
     # Chart 2 usage right left
     sql = '''
@@ -62,7 +62,8 @@ def index_view():
     '''
     result = db.session.execute(sql, {
         'session_boat': session['boat']['id'],
-        'report_year': report_year})
+        'report_year': report_year
+        })
     data = result.fetchall()
     db.session.commit()
 
@@ -86,7 +87,10 @@ def index_view():
             GROUP BY cost_types.id;
     '''
 
-    result = db.session.execute(sql, {'session_boat': session['boat']['id'], 'report_year': report_year})
+    result = db.session.execute(sql, {
+        'session_boat': session['boat']['id'],
+        'report_year': report_year
+        })
     data = result.fetchall()
     db.session.commit()
 
@@ -95,7 +99,7 @@ def index_view():
     label_cost = 'Kulut per kategoria'
     labels_cost = []
     data_cost = []
-    
+
     if len(data_frame.index) != 0:
         data_frame.columns = data[0].keys()
         labels_cost = data_frame['type']
@@ -109,7 +113,10 @@ def index_view():
             WHERE boat_id = :session_boat AND usage_id=3 AND EXTRACT(YEAR FROM start_date) = :report_year 
             GROUP BY name;
     '''
-    result = db.session.execute(sql, {'session_boat': session['boat']['id'], 'report_year': report_year})
+    result = db.session.execute(sql, {
+        'session_boat': session['boat']['id'],
+        'report_year': report_year
+        })
     data = result.fetchall()
     db.session.commit()
 
@@ -124,12 +131,21 @@ def index_view():
         labels_cost_owner = data_frame_2['name']
         data_cost_owner = data_frame_2['sum']
 
-    
+
     return render_template(
         'index.html',
         years=years,
-        labels_usage=labels_usage, label_usage=label_usage, data_usage_sailing=data_usage_sailing, data_usage_maintenance=data_usage_maintenance,
-        label_usage_right=label_usage_right, labels_usage_right=labels_usage_right, data_usage_right=data_usage_right,
-        labels_cost=labels_cost, label_cost=label_cost, data_cost=data_cost,
-        labels_cost_owner=labels_cost_owner, label_cost_owner=label_cost_owner, data_cost_owner=data_cost_owner
+        labels_usage=labels_usage,
+        label_usage=label_usage,
+        data_usage_sailing=data_usage_sailing,
+        data_usage_maintenance=data_usage_maintenance,
+        label_usage_right=label_usage_right,
+        labels_usage_right=labels_usage_right,
+        data_usage_right=data_usage_right,
+        labels_cost=labels_cost,
+        label_cost=label_cost,
+        data_cost=data_cost,
+        labels_cost_owner=labels_cost_owner,
+        label_cost_owner=label_cost_owner,
+        data_cost_owner=data_cost_owner
         )
