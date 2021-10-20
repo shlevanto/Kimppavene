@@ -48,8 +48,8 @@
           {% if t.income_type %}/ {{ t.income_type }}{% endif %}
         </td>
         <td>
-        {% if t.attachment_name %}
-          <a href="/show/{{ t.transaction_id }}" target="_blank">Näytä kuva</a>
+        {% if t.file_id %}
+          <a href="/show/{{ t.file_id }}" target="_blank">Näytä kuva</a>
         {% endif %}
         </td>
     </tr>
