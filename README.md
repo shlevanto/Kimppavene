@@ -56,6 +56,7 @@ tapahtumat ovat käyttö, talkootyö, kulut ja tulot.
 - Veneiden ja käyttäjien poistaminen / piilottaminen.
 - Uuden käyttövuoden käynnistäminen, antaa jokaiselle osakkaalle oletusarvoisen käyttöaikakiintiön.
 - Kirjattujen tapahtumien muokkaaminen.
+- Raporttinäkymä aikasarjana, milloin venettä on käytetty ja kuinka paljon esim. viikottain.
 
 ## Tietokantakaavio
 Tässä kuvattujen taulujen lisäksi tietokannassa on yksi näkymä eli view, jota käytetään raporttikuvaajien ja tapahtumalistauksen tekemiseen.
